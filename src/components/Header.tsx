@@ -1,78 +1,80 @@
-import Link from 'next/link';
-import Image from 'next/image';
+"use client";
+
 import { useState } from 'react';
-import { Button } from './Button';
+import Link from 'next/link';
+
+const navLinks = [
+  { name: 'Home', href: '/' },
+  { name: 'Shop', href: '/shop' },
+  { name: 'T-Shirts', href: '/shop?category=tshirts' },
+  { name: 'Pants', href: '/shop?category=pants' },
+  { name: 'Formal Shirts', href: '/shop?category=formal' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
+];
 
 export const Header: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Shop', href: '/shop' },
-    { name: 'T-Shirts', href: '/shop?tshirts' },
-    { name: 'Pants', href: '/shop?pants' },
-    { name: 'Formal Shirts', href: '/shop?formal' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
-  ];
-
   return (
     <header className="bg-primaryBlack text-white sticky top-0 z-50">
-      <div className="container mx-auto flex items-center justify-between p-4">
+      <div className="container mx-auto flex items-center justify-between px-4 py-4">
         {/* Brand wordmark */}
-        <Link href="/" className="text-2xl font-heading text-white">
+        <Link href="/" className="text-2xl font-heading tracking-widest text-white">
           SPOGMAI
         </Link>
-        {/* Desktop nav */}
-        <nav className="hidden md:flex space-x-6 items-center">
+
+        {/* Desktop navigation */}
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium tracking-wide">
           {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} className="hover:text-accent transition-colors">
+            <Link
+              key={link.name}
+              href={link.href}
+              className="hover:text-accent transition-colors duration-200"
+            >
               {link.name}
             </Link>
           ))}
-          {/* Icons */}
-          <button aria-label="Search" className="hover:text-accent">
-            🔍
-          </button>
-          <button aria-label="Cart" className="hover:text-accent">
-            🛒<span className="ml-1">0</span>
-          </button>
-          <button aria-label="Account" className="hover:text-accent">
-            👤
-          </button>
-          <button aria-label="Wishlist" className="hover:text-accent">
-            ❤️
-          </button>
         </nav>
-        {/* Mobile menu button */}
+
+        {/* Desktop icons */}
+        <div className="hidden md:flex items-center gap-4 text-lg">
+          <button aria-label="Search" className="hover:text-accent transition-colors">🔍</button>
+          <button aria-label="Cart" className="hover:text-accent transition-colors">
+            🛒 <span className="text-sm ml-0.5">0</span>
+          </button>
+          <button aria-label="Account" className="hover:text-accent transition-colors">👤</button>
+          <button aria-label="Wishlist" className="hover:text-accent transition-colors">♡</button>
+        </div>
+
+        {/* Mobile hamburger */}
         <button
-          className="md:hidden focus:outline-none"
-          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
+          className="md:hidden text-2xl focus:outline-none"
+          onClick={() => setMobileOpen((prev) => !prev)}
         >
           {mobileOpen ? '✕' : '☰'}
         </button>
       </div>
+
       {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="md:hidden bg-primaryBlack text-white p-4 space-y-4">
+        <div className="md:hidden bg-secondaryBlack px-4 pb-6 pt-2 flex flex-col gap-4 text-sm font-medium tracking-wide">
           {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} className="block hover:text-accent" onClick={() => setMobileOpen(false)}>
+            <Link
+              key={link.name}
+              href={link.href}
+              className="block py-1 hover:text-accent transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
               {link.name}
             </Link>
           ))}
-          <div className="flex space-x-4 mt-2">
-            <button aria-label="Search" className="hover:text-accent">
-              🔍
-            </button>
-            <button aria-label="Cart" className="hover:text-accent">
-              🛒<span className="ml-1">0</span>
-            </button>
-            <button aria-label="Account" className="hover:text-accent">
-              👤
-            </button>
-            <button aria-label="Wishlist" className="hover:text-accent">
-              ❤️
-            </button>
+          <div className="flex gap-5 pt-2 text-lg border-t border-white/10">
+            <button aria-label="Search" className="hover:text-accent">🔍</button>
+            <button aria-label="Cart" className="hover:text-accent">🛒 <span className="text-sm">0</span></button>
+            <button aria-label="Account" className="hover:text-accent">👤</button>
+            <button aria-label="Wishlist" className="hover:text-accent">♡</button>
           </div>
         </div>
       )}

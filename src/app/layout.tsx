@@ -5,7 +5,7 @@ import { Footer } from '../components/Footer';
 import { AnnouncementBar } from '../components/AnnouncementBar';
 
 export const metadata: Metadata = {
-  title: 'SPOGMAI – Premium Men\'s Fashion',
+  title: "SPOGMAI – Premium Men's Fashion",
   description: 'Wear the legacy. Elegant, modern, timeless menswear.',
 };
 
@@ -14,10 +14,19 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-background text-primaryBlack">
+      <head>
+        {/* Google Fonts – loaded via <link> so the @tailwindcss/turbopack loader does not need to process external @import urls */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="min-h-screen flex flex-col">
         <AnnouncementBar />
         <Header />
-        <main className="flex-1 container mx-auto px-4 py-8">
+        <main className="flex-1">
           {children}
         </main>
         <Footer />

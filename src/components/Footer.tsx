@@ -26,7 +26,7 @@ export const Footer: React.FC = () => {
         </div>
       </div>
       <div className="text-center text-xs text-secondaryText mt-6">
-        © {new Date().getFullYear()} SPOGMAI. All rights reserved.
+        &copy; 2026 SPOGMAI. All rights reserved.
       </div>
     </footer>
   );

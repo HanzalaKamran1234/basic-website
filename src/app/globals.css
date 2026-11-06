@@ -1,23 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* Custom font utilities */
-.font-heading { @apply font-heading; }
-.font-body { @apply font-body; }
-
+@theme {
+  --color-primaryBlack:   #080808;
+  --color-secondaryBlack: #151515;
+  --color-background:     #F5F3EF;
+  --color-secondaryText:  #777777;
+  --color-accent:         #B8A58A;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body:    'Inter', sans-serif;
+}
 
 @layer base {
   html {
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-primaryBlack;
-    font-family: 'Inter', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-primaryBlack);
+    font-family: var(--font-body);
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-heading);
   }
 }
