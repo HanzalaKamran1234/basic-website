@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from 'react';
-import Link from 'next/link';
 import { ProductCard } from './ProductCard';
 import { QuickView } from './QuickView';
 import { FilterIcon, SearchIcon, CloseIcon } from './icons';
