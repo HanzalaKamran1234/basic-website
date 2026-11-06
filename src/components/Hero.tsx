@@ -14,14 +14,14 @@ export const Hero: React.FC = () => {
 
         {/* ── LEFT: Text Column ─────────────────────────────────── */}
         <div className="
-          relative z-10 flex flex-col justify-between
+          relative z-10 flex flex-col
           w-full lg:w-[48%] xl:w-[44%]
           px-margin md:px-margin-desktop lg:pl-[6vw] xl:pl-[7vw] lg:pr-16
-          pt-32 md:pt-36 pb-10 lg:py-20 lg:pt-36
+          pt-24 md:pt-28 lg:pt-28 pb-10
           order-2 lg:order-1
         ">
           {/* Top editorial meta row */}
-          <div className="flex items-center gap-space-sm mb-auto pb-space-lg">
+          <div className="flex items-center gap-space-sm pb-space-lg">
             <span className="inline-block w-[6px] h-[6px] rounded-full bg-tertiary animate-pulse" />
             <span className="font-label-caps-md text-label-caps-md tracking-widest text-tertiary uppercase">
               AUTUMN / WINTER ARCHIVE
@@ -29,14 +29,14 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Centre: main editorial copy */}
-          <div className="flex-1 flex flex-col justify-center space-y-space-lg">
+          <div className="flex flex-col space-y-space-lg">
             {/* Editorial label */}
             <p className="font-label-caps-sm text-label-caps-sm text-tertiary tracking-[0.3em] uppercase">
               SPOGMAI — THE MENSWEAR COLLECTION
             </p>
 
             {/* Primary headline */}
-            <h1 className="font-display-hero text-display-hero-mobile md:text-display-hero text-primary-fixed tracking-tight font-normal leading-none">
+            <h1 className="font-display-hero text-[clamp(3rem,7vw,6rem)] md:text-display-hero text-primary-fixed tracking-tight font-normal leading-none">
               WEAR THE{' '}
               <span className="italic font-light text-tertiary">LEGACY.</span>
             </h1>
@@ -102,7 +102,7 @@ export const Hero: React.FC = () => {
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 56vw"
-            className="object-contain object-center lg:object-right"
+            className="object-contain object-top lg:object-right-top"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = 'none';
             }}
@@ -138,15 +138,6 @@ export const Hero: React.FC = () => {
             pointer-events-none z-10
           " />
 
-          {/* Editorial tag — desktop only */}
-          <div className="absolute top-6 right-6 hidden lg:flex flex-col items-end gap-1 z-20">
-            <span className="font-label-caps-sm text-label-caps-sm text-on-surface-variant/50 uppercase tracking-widest">
-              HAUTE PRÊT-À-PORTER
-            </span>
-            <span className="font-label-caps-sm text-label-caps-sm text-tertiary/60 uppercase tracking-widest">
-              PERENNIAL MENSWEAR
-            </span>
-          </div>
         </div>
 
       </div>
