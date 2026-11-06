@@ -15,7 +15,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
   const { toggle, has } = useWishlist();
   const { addItem }     = useCart();
-  const [hovered, setHovered]   = useState(false);
+  const [hovered, setHovered]     = useState(false);
   const [justAdded, setJustAdded] = useState(false);
 
   const wishlisted = has(product.id);
@@ -43,137 +43,171 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
       name:  product.name,
       price: product.salePrice ?? product.price,
       image: img1,
-      size:  product.sizes[0],
+      size:  product.sizes[0] ?? 'M',
       color: product.colors[0]?.name ?? '',
     });
     setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 1800);
+    setTimeout(() => setJustAdded(false), 2000);
   };
 
   return (
-    <Link
-      href={`/shop/${product.slug}`}
-      className="group block relative"
+    <div
+      className="group flex flex-col bg-surface-container-low border border-outline-variant/20 hover:border-tertiary/40 transition-colors duration-500 overflow-hidden"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* ── Image ──────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-white aspect-[3/4] mb-4">
+      {/* ── Image container with 4:5 luxury aspect ratio ──── */}
+      <Link
+        href={`/shop/${product.slug}`}
+        className="relative overflow-hidden aspect-[4/5] bg-surface-container-lowest block"
+      >
         {/* Primary image */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={img1}
           alt={product.name}
-          className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${
-            hovered ? 'opacity-0 scale-[1.03]' : 'opacity-100 scale-100'
-          }`}
-        />
-        {/* Secondary image */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={img2}
-          alt={`${product.name} alternate`}
-          className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${
-            hovered ? 'opacity-100 scale-100' : 'opacity-0 scale-[1.03]'
+          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out ${
+            hovered ? 'scale-105' : 'scale-100'
           }`}
         />
 
+        {/* Alternate hover image cross-fade if available */}
+        {img2 !== img1 && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={img2}
+            alt={`${product.name} alternate angle`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out ${
+              hovered ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
+
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+        <div className="absolute top-space-sm left-space-sm flex flex-col gap-1 z-10">
           {product.isNew && (
-            <span className="font-body text-[9px] tracking-[0.2em] uppercase bg-primaryBlack text-white px-2.5 py-1">
-              New
+            <span className="bg-primary-container/85 backdrop-blur-sm px-space-sm py-1 font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-wider">
+              NEW RELEASE
             </span>
           )}
           {product.salePrice && (
-            <span className="font-body text-[9px] tracking-[0.2em] uppercase bg-accent text-white px-2.5 py-1">
-              Sale
+            <span className="bg-primary-container/85 backdrop-blur-sm px-space-sm py-1 font-label-caps-sm text-label-caps-sm text-tertiary-fixed uppercase tracking-wider">
+              ARCHIVE SALE
             </span>
           )}
           {product.isBestSeller && !product.isNew && (
-            <span className="font-body text-[9px] tracking-[0.2em] uppercase bg-primaryBlack/80 text-white px-2.5 py-1">
-              Best Seller
+            <span className="bg-primary-container/85 backdrop-blur-sm px-space-sm py-1 font-label-caps-sm text-label-caps-sm text-on-surface uppercase tracking-wider">
+              SIGNATURE
             </span>
           )}
         </div>
 
-        {/* Wishlist */}
+        {/* Wishlist button */}
         <button
           onClick={handleWishlist}
-          aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-          className={`absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm transition-all duration-200 ${
-            hovered || wishlisted ? 'opacity-100' : 'opacity-0'
-          } hover:bg-white`}
+          aria-label={wishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
+          className="absolute top-space-sm right-space-sm w-9 h-9 bg-primary-container/80 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-tertiary transition-colors z-10"
         >
           <HeartIcon
-            className={`w-4 h-4 transition-colors ${wishlisted ? 'text-red-500' : 'text-primaryBlack'}`}
+            className={`w-4 h-4 transition-colors ${
+              wishlisted ? 'text-tertiary fill-current' : 'text-on-surface-variant group-hover:text-on-surface'
+            }`}
             filled={wishlisted}
           />
         </button>
 
-        {/* Hover overlay — Quick View + Add to Bag */}
+        {/* Quick Sizes & Actions Overlay Bar */}
         <div
-          className={`absolute bottom-0 left-0 right-0 flex flex-col gap-0 transition-all duration-300 ${
-            hovered ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
+          className={`absolute inset-x-0 bottom-0 bg-primary-container/95 border-t border-outline-variant/30 p-space-sm transform transition-transform duration-300 z-10 flex items-center justify-between ${
+            hovered ? 'translate-y-0' : 'translate-y-full'
           }`}
         >
-          <button
-            onClick={handleQuickView}
-            className="flex items-center justify-center gap-2 bg-white/95 backdrop-blur-sm text-primaryBlack font-body text-[10px] tracking-[0.2em] uppercase py-3 hover:bg-background transition-colors"
-          >
-            <EyeIcon className="w-3.5 h-3.5" />
-            Quick View
-          </button>
-          <button
-            onClick={handleAddToBag}
-            className={`font-body text-[10px] tracking-[0.2em] uppercase py-3.5 transition-colors ${
-              justAdded
-                ? 'bg-accent text-white'
-                : 'bg-primaryBlack text-white hover:bg-secondaryBlack'
-            }`}
-          >
-            {justAdded ? '✓ Added' : 'Add to Bag'}
-          </button>
-        </div>
-      </div>
-
-      {/* ── Info ───────────────────────────────────────── */}
-      <div>
-        {/* Colour dots */}
-        {product.colors.length > 0 && (
-          <div className="flex gap-1.5 mb-2">
-            {product.colors.slice(0, 5).map((c) => (
-              <span
-                key={c.name}
-                title={c.name}
-                className="w-3 h-3 rounded-full border border-primaryBlack/15 shrink-0"
-                style={{ backgroundColor: c.hex }}
-              />
+          <div className="flex items-center gap-space-xs text-on-surface font-label-caps-sm text-label-caps-sm">
+            <span className="text-on-surface-variant mr-1 tracking-wider">SIZES:</span>
+            {product.sizes.slice(0, 4).map((s) => (
+              <span key={s} className="hover:text-tertiary px-0.5 tracking-wider">
+                {s}
+              </span>
             ))}
           </div>
-        )}
 
-        <h3 className="font-heading text-lg text-primaryBlack leading-snug group-hover:text-secondaryText transition-colors duration-300 mb-1">
-          {product.name}
-        </h3>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleQuickView}
+              title="Quick View"
+              className="text-on-surface-variant hover:text-tertiary p-1 transition-colors"
+            >
+              <EyeIcon className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={handleAddToBag}
+              className={`font-label-caps-sm text-label-caps-sm uppercase tracking-widest px-2.5 py-1 transition-colors ${
+                justAdded
+                  ? 'bg-tertiary text-on-tertiary'
+                  : 'bg-surface-container-high text-on-surface hover:bg-tertiary hover:text-on-tertiary'
+              }`}
+            >
+              {justAdded ? '✓ ADDED' : '+ BAG'}
+            </button>
+          </div>
+        </div>
+      </Link>
 
-        <div className="flex items-baseline gap-2">
-          {product.salePrice ? (
-            <>
-              <span className="font-body text-sm font-medium text-primaryBlack">
-                {formatPrice(product.salePrice)}
-              </span>
-              <span className="font-body text-xs text-secondaryText line-through">
+      {/* ── Garment Details ────────────────────────────── */}
+      <div className="p-space-md flex flex-col justify-between flex-1 space-y-space-xs">
+        <div>
+          {/* Category / Fabric label */}
+          <p className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-wider mb-1 line-clamp-1">
+            {product.material.split('—')[0]?.trim() || product.category.toUpperCase()}
+          </p>
+
+          {/* Product Title */}
+          <Link href={`/shop/${product.slug}`} className="block">
+            <h3 className="font-headline-sm text-headline-sm text-on-surface group-hover:text-tertiary transition-colors duration-300 font-normal leading-snug line-clamp-1">
+              {product.name}
+            </h3>
+          </Link>
+        </div>
+
+        {/* Pricing & Colour Swatches */}
+        <div className="pt-space-xs flex items-center justify-between border-t border-outline-variant/15 mt-space-xs">
+          <div className="flex items-baseline gap-2">
+            {product.salePrice ? (
+              <>
+                <span className="font-body-md text-body-md text-tertiary font-light">
+                  {formatPrice(product.salePrice)}
+                </span>
+                <span className="font-body-sm text-body-sm text-on-surface-variant/60 line-through">
+                  {formatPrice(product.price)}
+                </span>
+              </>
+            ) : (
+              <span className="font-body-md text-body-md text-on-surface font-light">
                 {formatPrice(product.price)}
               </span>
-            </>
-          ) : (
-            <span className="font-body text-sm text-primaryBlack">
-              {formatPrice(product.price)}
-            </span>
+            )}
+          </div>
+
+          {/* Colour dots */}
+          {product.colors.length > 0 && (
+            <div className="flex items-center gap-1.5">
+              {product.colors.slice(0, 3).map((c) => (
+                <span
+                  key={c.name}
+                  title={c.name}
+                  className="w-2.5 h-2.5 inline-block border border-outline-variant/50"
+                  style={{ backgroundColor: c.hex }}
+                />
+              ))}
+              {product.colors.length > 3 && (
+                <span className="font-caption text-caption text-on-surface-variant">
+                  +{product.colors.length - 3}
+                </span>
+              )}
+            </div>
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

@@ -1,132 +1,227 @@
+"use client";
+
+import { useState } from 'react';
 import Link from 'next/link';
 
-const footerNav = {
-  shop: [
-    { name: 'All Products', href: '/shop' },
-    { name: 'T-Shirts', href: '/shop?category=tshirts' },
-    { name: 'Pants', href: '/shop?category=pants' },
-    { name: 'Formal Shirts', href: '/shop?category=formal' },
-    { name: 'New Arrivals', href: '/shop?filter=new' },
-    { name: 'Best Sellers', href: '/shop?filter=bestseller' },
-  ],
-  info: [
-    { name: 'Our Story', href: '/about' },
-    { name: 'Size Guide', href: '/size-guide' },
-    { name: 'Contact', href: '/contact' },
-    { name: 'FAQ', href: '/faq' },
-  ],
-  policies: [
-    { name: 'Shipping Policy', href: '/shipping' },
-    { name: 'Return Policy', href: '/returns' },
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms & Conditions', href: '/terms' },
-  ],
-};
+export const Footer: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
-export const Footer: React.FC = () => (
-  <footer className="bg-primaryBlack text-white">
-    {/* Top section */}
-    <div className="container mx-auto px-4 md:px-8 pt-16 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim() && email.includes('@')) {
+      setSubmitted(true);
+      setEmail('');
+    }
+  };
 
-      {/* Brand */}
-      <div className="lg:col-span-2">
-        <Link href="/" className="font-heading text-3xl tracking-[0.2em] text-white hover:text-accent transition-colors">
-          SPOGMAI
-        </Link>
-        <p className="font-body text-white/50 text-sm leading-relaxed mt-4 max-w-xs">
-          Premium men&rsquo;s clothing crafted for the modern gentleman. Quality, heritage, and effortless sophistication — worn every day.
-        </p>
-        <p className="font-body text-accent/80 text-xs tracking-[0.2em] uppercase mt-5">
-          Wear the Legacy.
-        </p>
-        {/* Social links — placeholder */}
-        <div className="flex gap-4 mt-6">
-          {['Instagram', 'Facebook', 'Twitter'].map((name) => (
-            <a
-              key={name}
-              href="#"
-              aria-label={name}
-              className="text-white/40 hover:text-accent font-body text-xs tracking-widest uppercase transition-colors"
-            >
-              {name}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* Shop */}
-      <div>
-        <h3 className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-white/50 mb-5">Shop</h3>
-        <ul className="space-y-3">
-          {footerNav.shop.map((link) => (
-            <li key={link.name}>
-              <Link href={link.href} className="font-body text-sm text-white/70 hover:text-white transition-colors">
-                {link.name}
+  return (
+    <footer className="w-full bg-primary-container border-t border-tertiary/20 pt-space-2xl pb-space-xl text-on-surface">
+      <div className="w-full px-margin md:px-margin-desktop">
+        {/* ── 5-Column Architectural Grid ───────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-gutter-desktop mb-space-2xl">
+          {/* Col 1: Brand & Slogan */}
+          <div className="lg:col-span-1 flex flex-col justify-between">
+            <div className="space-y-space-sm">
+              <Link
+                href="/"
+                className="font-headline-md text-headline-md tracking-widest text-on-surface uppercase block hover:text-tertiary transition-colors"
+              >
+                SPOGMAI
               </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+              <p className="font-label-caps-md text-label-caps-md text-tertiary tracking-widest uppercase">
+                WEAR THE LEGACY.
+              </p>
+            </div>
+            <div className="mt-space-lg">
+              <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xs leading-relaxed font-light">
+                Haute couture tailoring engineered with architectural restraint and uncompromising discipline.
+              </p>
+            </div>
+          </div>
 
-      {/* Info */}
-      <div>
-        <h3 className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-white/50 mb-5">Information</h3>
-        <ul className="space-y-3">
-          {footerNav.info.map((link) => (
-            <li key={link.name}>
-              <Link href={link.href} className="font-body text-sm text-white/70 hover:text-white transition-colors">
-                {link.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Contact */}
-      <div>
-        <h3 className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-white/50 mb-5">Contact</h3>
-        <ul className="space-y-3 font-body text-sm text-white/70">
-          <li>
-            <span className="block text-white/40 text-xs uppercase tracking-widest mb-1">Email</span>
-            <a href="mailto:info@spogmai.com" className="hover:text-white transition-colors">
-              info@spogmai.com
-            </a>
-          </li>
-          <li>
-            <span className="block text-white/40 text-xs uppercase tracking-widest mb-1">Phone</span>
-            <span className="text-white/50 italic text-xs">Contact details to be added</span>
-          </li>
-          <li>
-            <span className="block text-white/40 text-xs uppercase tracking-widest mb-1">Hours</span>
-            <span>Mon–Sat, 10am–7pm</span>
-          </li>
-        </ul>
-
-        <div className="mt-6">
-          <h3 className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-white/50 mb-3">Policies</h3>
-          <ul className="space-y-2">
-            {footerNav.policies.map((link) => (
-              <li key={link.name}>
-                <Link href={link.href} className="font-body text-xs text-white/50 hover:text-white/80 transition-colors">
-                  {link.name}
+          {/* Col 2: Collections */}
+          <div className="space-y-space-md">
+            <span className="font-label-caps-md text-label-caps-md text-tertiary tracking-widest uppercase block border-b border-outline-variant/20 pb-space-xs">
+              COLLECTIONS
+            </span>
+            <ul className="space-y-space-sm">
+              <li>
+                <Link
+                  href="/shop?category=tshirts"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Premium T-Shirts
                 </Link>
               </li>
-            ))}
-          </ul>
+              <li>
+                <Link
+                  href="/shop?category=formal"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Tailored Shirts
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/shop?category=pants"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Relaxed Trousers
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/shop?filter=new"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  New Arrivals
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/shop"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  All Collections
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Client Services */}
+          <div className="space-y-space-md">
+            <span className="font-label-caps-md text-label-caps-md text-tertiary tracking-widest uppercase block border-b border-outline-variant/20 pb-space-xs">
+              CLIENT SERVICES
+            </span>
+            <ul className="space-y-space-sm">
+              <li>
+                <Link
+                  href="/cart"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Shopping Bag
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/size-guide"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Size & Fit Guide
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/wishlist"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Saved Wishlist
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Inquiries & Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 4: About Atelier */}
+          <div className="space-y-space-md">
+            <span className="font-label-caps-md text-label-caps-md text-tertiary tracking-widest uppercase block border-b border-outline-variant/20 pb-space-xs">
+              ABOUT
+            </span>
+            <ul className="space-y-space-sm">
+              <li>
+                <Link
+                  href="/about"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Our Philosophy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Architectural Craft
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  Atelier Inquiries
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 5: Newsletter */}
+          <div className="space-y-space-md">
+            <span className="font-label-caps-md text-label-caps-md text-tertiary tracking-widest uppercase block border-b border-outline-variant/20 pb-space-xs">
+              NEWSLETTER
+            </span>
+            <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed font-light">
+              Stay in the world of SPOGMAI. Receive seasonal releases and exclusive private viewings.
+            </p>
+
+            {submitted ? (
+              <div className="pt-space-xs">
+                <p className="font-label-caps-sm text-tertiary uppercase tracking-wider">
+                  Privilege Registered
+                </p>
+                <p className="font-caption text-caption text-on-surface-variant/60 mt-1">
+                  (Demo only — no emails are currently stored)
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleNewsletterSubmit} className="relative mt-space-md">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  required
+                  className="w-full bg-transparent border-0 border-b border-outline-variant/40 pb-space-xs pt-space-xs font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-tertiary transition-colors"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-0 bottom-space-xs font-label-caps-sm text-label-caps-sm text-tertiary hover:text-on-surface transition-colors tracking-widest uppercase"
+                >
+                  JOIN
+                </button>
+              </form>
+            )}
+            <p className="font-caption text-caption text-on-surface-variant/50 tracking-wider uppercase">
+              Discreet communications only.
+            </p>
+          </div>
+        </div>
+
+        {/* ── Bottom Atelier Registry Bar ─────────────────── */}
+        <div className="pt-space-lg border-t border-outline-variant/20 flex flex-col md:flex-row items-center justify-between gap-space-md text-center md:text-left">
+          <div className="flex items-center gap-space-sm">
+            <span className="font-caption text-caption text-on-surface-variant/80 uppercase tracking-widest">
+              &copy; 2026 SPOGMAI DIGITAL FLAGSHIP. ALL RIGHTS RESERVED.
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-space-lg">
+            <span className="font-caption text-caption text-on-surface-variant/60 uppercase tracking-widest">
+              DEMONSTRATION ARCHIVE
+            </span>
+            <span className="font-caption text-caption text-tertiary uppercase tracking-widest">
+              REGION: PAKISTAN (PKR)
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-
-    {/* Bottom bar */}
-    <div className="border-t border-white/10">
-      <div className="container mx-auto px-4 md:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
-        <p className="font-body text-xs text-white/30">
-          &copy; 2026 SPOGMAI. All rights reserved.
-        </p>
-        <p className="font-body text-xs text-white/20 italic">
-          All prices and product details shown are demonstration data only.
-        </p>
-      </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};

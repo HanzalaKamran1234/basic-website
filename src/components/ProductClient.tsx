@@ -31,16 +31,19 @@ export const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
   const price      = product.salePrice ?? product.price;
 
   const handleAddToBag = () => {
-    if (!selectedSize) { setSizeError(true); return; }
+    if (!selectedSize) {
+      setSizeError(true);
+      return;
+    }
     setSizeError(false);
     addItem({
-      id:    product.id,
-      slug:  product.slug,
-      name:  product.name,
+      id:       product.id,
+      slug:     product.slug,
+      name:     product.name,
       price,
-      image: product.images[0],
-      size:  selectedSize,
-      color: selectedColor ?? (product.colors[0]?.name ?? ''),
+      image:    product.images[0],
+      size:     selectedSize,
+      color:    selectedColor ?? (product.colors[0]?.name ?? ''),
       quantity,
     });
     setAdded(true);
@@ -48,110 +51,144 @@ export const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
   };
 
   const tabs: { key: TabKey; label: string; content: string }[] = [
-    { key: 'description', label: 'Description', content: product.description },
-    { key: 'material',    label: 'Material',    content: product.material },
-    { key: 'fit',         label: 'Fit',         content: product.fit },
-    { key: 'care',        label: 'Care',        content: product.care },
+    { key: 'description', label: 'DESCRIPTION', content: product.description },
+    { key: 'material',    label: 'MATERIAL & WEAVE', content: product.material },
+    { key: 'fit',         label: 'FIT & PROPORTIONS', content: product.fit },
+    { key: 'care',        label: 'GARMENT CARE', content: product.care },
   ];
 
   return (
-    <div className="bg-background min-h-screen">
-
-      {/* Breadcrumb */}
-      <div className="container mx-auto px-6 md:px-10 pt-28 pb-4">
-        <nav className="font-body text-xs text-secondaryText flex items-center gap-2 flex-wrap">
-          <Link href="/"    className="hover:text-primaryBlack transition-colors">Home</Link>
-          <span>/</span>
-          <Link href="/shop" className="hover:text-primaryBlack transition-colors">Shop</Link>
-          <span>/</span>
-          <Link href={`/shop?category=${product.category}`} className="hover:text-primaryBlack transition-colors">
+    <div className="bg-surface min-h-screen text-on-surface flex flex-col">
+      {/* ── Breadcrumb Bar ─────────────────────────────────── */}
+      <div className="w-full bg-primary-container border-b border-outline-variant/20 pt-32 pb-4 px-margin md:px-margin-desktop">
+        <nav aria-label="Breadcrumb" className="font-label-caps-sm text-label-caps-sm text-on-surface-variant flex items-center gap-2 flex-wrap uppercase tracking-wider">
+          <Link href="/" className="hover:text-tertiary transition-colors">
+            HOME
+          </Link>
+          <span className="text-outline-variant/50">/</span>
+          <Link href="/shop" className="hover:text-tertiary transition-colors">
+            ARCHIVE
+          </Link>
+          <span className="text-outline-variant/50">/</span>
+          <Link
+            href={`/shop?category=${product.category}`}
+            className="hover:text-tertiary transition-colors"
+          >
             {categoryLabels[product.category]}
           </Link>
-          <span>/</span>
-          <span className="text-primaryBlack">{product.name}</span>
+          <span className="text-outline-variant/50">/</span>
+          <span className="text-on-surface">{product.name}</span>
         </nav>
       </div>
 
-      {/* Product section */}
-      <div className="container mx-auto px-6 md:px-10 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-start">
+      {/* ── Main Product Detail Grid ────────────────────────── */}
+      <section className="w-full px-margin md:px-margin-desktop py-space-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-start">
 
-          {/* ── Gallery ───────────────────────────────── */}
-          <div className="sticky top-24">
-            <div className="aspect-[3/4] bg-white overflow-hidden mb-3 img-zoom">
+          {/* Left Column: Multi-view Gallery (7 cols) */}
+          <div className="lg:col-span-7 space-y-space-md">
+            {/* Main Stage Image */}
+            <div className="relative aspect-[4/5] bg-surface-container-lowest overflow-hidden border border-outline-variant/20">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={product.images[activeImage]}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-700 ease-out hover:scale-105"
               />
+
+              {/* Status Badge */}
+              <div className="absolute top-space-md left-space-md flex flex-col gap-1 z-10">
+                {product.isNew && (
+                  <span className="bg-primary-container/90 px-space-sm py-1 font-label-caps-sm text-label-caps-sm text-tertiary tracking-widest uppercase">
+                    NEW RELEASE
+                  </span>
+                )}
+                {product.salePrice && (
+                  <span className="bg-primary-container/90 px-space-sm py-1 font-label-caps-sm text-label-caps-sm text-tertiary-fixed tracking-widest uppercase">
+                    ARCHIVE ARCHIVE SALE
+                  </span>
+                )}
+              </div>
             </div>
+
+            {/* Thumbnail Strip */}
             {product.images.length > 1 && (
-              <div className="flex gap-2">
+              <div className="flex gap-space-sm overflow-x-auto pb-2 scrollbar-none">
                 {product.images.map((src, i) => (
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`w-20 h-24 overflow-hidden border-2 transition-all duration-200 ${
-                      activeImage === i ? 'border-primaryBlack' : 'border-transparent opacity-50 hover:opacity-80'
+                    className={`relative w-20 h-24 overflow-hidden border transition-all shrink-0 ${
+                      activeImage === i
+                        ? 'border-tertiary opacity-100'
+                        : 'border-outline-variant/30 opacity-60 hover:opacity-90'
                     }`}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={src} alt={`${product.name} view ${i + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={src}
+                      alt={`${product.name} angle ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* ── Info ──────────────────────────────────── */}
-          <div>
-            {/* Badges */}
-            <div className="flex gap-2 mb-5">
-              {product.isNew && (
-                <span className="font-body text-[9px] tracking-[0.2em] uppercase bg-primaryBlack text-white px-3 py-1">New</span>
-              )}
-              {product.isBestSeller && (
-                <span className="font-body text-[9px] tracking-[0.2em] uppercase bg-accent text-white px-3 py-1">Best Seller</span>
-              )}
+          {/* Right Column: Garment Specification (5 cols) */}
+          <div className="lg:col-span-5 space-y-space-lg lg:sticky lg:top-28">
+            <div className="space-y-space-xs border-b border-outline-variant/20 pb-space-lg">
+              <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] block">
+                {categoryLabels[product.category]} • ATELIER № {product.id.toUpperCase()}
+              </span>
+
+              <h1 className="font-headline-lg text-headline-lg md:text-[40px] md:leading-[48px] text-primary-fixed font-normal tracking-tight">
+                {product.name}
+              </h1>
+
+              <div className="flex items-baseline gap-space-sm pt-space-xs">
+                {product.salePrice ? (
+                  <>
+                    <span className="font-headline-sm text-headline-sm text-tertiary font-normal">
+                      {formatPrice(product.salePrice)}
+                    </span>
+                    <span className="font-body-md text-body-md text-on-surface-variant/60 line-through">
+                      {formatPrice(product.price)}
+                    </span>
+                  </>
+                ) : (
+                  <span className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                    {formatPrice(product.price)}
+                  </span>
+                )}
+                <span className="font-caption text-caption text-on-surface-variant uppercase tracking-widest pl-2">
+                  TAX INCLUDED • DEMO STOREFRONT CATALOGUE
+                </span>
+              </div>
             </div>
 
-            <h1 className="font-heading text-[clamp(36px,4vw,54px)] text-primaryBlack mb-2 leading-tight">
-              {product.name}
-            </h1>
-            <p className="font-body text-[11px] text-secondaryText tracking-[0.2em] uppercase mb-6">
-              {categoryLabels[product.category]}
+            {/* Description Summary */}
+            <p className="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed">
+              {product.description}
             </p>
 
-            {/* Price */}
-            <div className="flex items-baseline gap-3 mb-8">
-              <span className="font-body text-2xl font-semibold text-primaryBlack">{formatPrice(price)}</span>
-              {product.salePrice && (
-                <>
-                  <span className="font-body text-base text-secondaryText line-through">{formatPrice(product.price)}</span>
-                  <span className="font-body text-xs text-white bg-accent px-2 py-0.5">
-                    Save {formatPrice(product.price - product.salePrice)}
-                  </span>
-                </>
-              )}
-            </div>
-
-            {/* Colour */}
+            {/* Colour Selector */}
             {product.colors.length > 0 && (
-              <div className="mb-6">
-                <p className="font-body text-[10px] tracking-[0.2em] uppercase text-secondaryText mb-3">
-                  Colour: <span className="text-primaryBlack">{selectedColor ?? 'Select'}</span>
-                </p>
-                <div className="flex gap-2 flex-wrap">
+              <div className="space-y-space-xs">
+                <span className="font-label-caps-sm text-label-caps-sm text-on-surface-variant uppercase tracking-wider block">
+                  COLOUR PALETTE: <span className="text-on-surface">{selectedColor ?? product.colors[0]?.name}</span>
+                </span>
+                <div className="flex items-center gap-space-sm">
                   {product.colors.map((c) => (
                     <button
                       key={c.name}
                       title={c.name}
                       onClick={() => setSelectedColor(c.name)}
-                      className={`w-8 h-8 rounded-full border-2 transition-all duration-200 ${
-                        selectedColor === c.name
-                          ? 'border-primaryBlack scale-110'
-                          : 'border-primaryBlack/15 hover:border-primaryBlack/40'
+                      className={`w-8 h-8 border transition-all ${
+                        (selectedColor ?? product.colors[0]?.name) === c.name
+                          ? 'border-tertiary scale-110 shadow-md'
+                          : 'border-outline-variant/50 hover:border-outline'
                       }`}
                       style={{ backgroundColor: c.hex }}
                     />
@@ -160,116 +197,150 @@ export const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
               </div>
             )}
 
-            {/* Size */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-3">
-                <p className={`font-body text-[10px] tracking-[0.2em] uppercase ${sizeError ? 'text-red-500' : 'text-secondaryText'}`}>
-                  Size: <span className={sizeError ? 'text-red-500' : 'text-primaryBlack'}>
-                    {selectedSize ?? (sizeError ? 'Please select' : 'Select')}
-                  </span>
-                </p>
+            {/* Size Selector with Validation */}
+            <div className="space-y-space-xs">
+              <div className="flex items-center justify-between">
+                <span className={`font-label-caps-sm text-label-caps-sm uppercase tracking-wider block ${
+                  sizeError ? 'text-error font-medium' : 'text-on-surface-variant'
+                }`}>
+                  SELECT PROPORTION: {selectedSize ? <span className="text-on-surface">{selectedSize}</span> : <span className={sizeError ? 'text-error' : ''}>REQUIRED</span>}
+                </span>
+
                 <Link
                   href="/size-guide"
-                  className="font-body text-[10px] text-secondaryText underline underline-offset-4 hover:text-primaryBlack transition-colors"
+                  className="font-label-caps-sm text-label-caps-sm text-tertiary hover:underline uppercase tracking-widest"
                 >
-                  Size Guide
+                  SIZE GUIDE →
                 </Link>
               </div>
-              <div className="flex gap-2 flex-wrap">
+
+              <div className="flex items-center gap-2 flex-wrap">
                 {product.sizes.map((s) => (
                   <button
                     key={s}
-                    onClick={() => { setSelectedSize(s); setSizeError(false); }}
-                    className={`w-12 h-12 font-body text-sm border transition-colors ${
+                    onClick={() => {
+                      setSelectedSize(s);
+                      setSizeError(false);
+                    }}
+                    className={`min-w-12 h-12 px-space-sm font-label-caps-sm text-label-caps-sm uppercase tracking-wider border transition-colors ${
                       selectedSize === s
-                        ? 'bg-primaryBlack text-white border-primaryBlack'
-                        : 'bg-white text-primaryBlack border-primaryBlack/20 hover:border-primaryBlack'
+                        ? 'bg-tertiary text-on-tertiary border-tertiary'
+                        : 'bg-surface-container-low border-outline-variant/30 text-on-surface hover:border-tertiary/60'
                     }`}
                   >
                     {s}
                   </button>
                 ))}
               </div>
+
+              {sizeError && (
+                <p className="font-caption text-caption text-error tracking-wider uppercase pt-1">
+                  Please select your required garment size before adding to bag.
+                </p>
+              )}
             </div>
 
-            {/* Quantity */}
-            <div className="mb-8">
-              <p className="font-body text-[10px] tracking-[0.2em] uppercase text-secondaryText mb-3">Quantity</p>
-              <div className="flex items-center border border-primaryBlack/20 w-fit">
-                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="w-10 h-10 font-body text-lg flex items-center justify-center hover:bg-primaryBlack/5 transition-colors" aria-label="Decrease">−</button>
-                <span className="w-10 text-center font-body text-sm">{quantity}</span>
-                <button onClick={() => setQuantity((q) => Math.min(10, q + 1))} className="w-10 h-10 font-body text-lg flex items-center justify-center hover:bg-primaryBlack/5 transition-colors" aria-label="Increase">+</button>
+            {/* Quantity Selector & CTAs */}
+            <div className="space-y-space-sm pt-space-xs">
+              <div className="flex items-center gap-space-md">
+                <span className="font-label-caps-sm text-label-caps-sm text-on-surface-variant uppercase tracking-wider">
+                  QUANTITY:
+                </span>
+                <div className="flex items-center border border-outline-variant/40 bg-surface-container-low">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    className="w-10 h-10 flex items-center justify-center text-on-surface hover:text-tertiary transition-colors"
+                  >
+                    −
+                  </button>
+                  <span className="w-10 text-center font-label-caps-sm text-label-caps-sm text-on-surface">
+                    {quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => q + 1)}
+                    className="w-10 h-10 flex items-center justify-center text-on-surface hover:text-tertiary transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-space-sm pt-space-xs">
+                <button
+                  onClick={handleAddToBag}
+                  className={`flex-1 py-space-md font-label-caps-md text-label-caps-md uppercase tracking-[0.2em] transition-all duration-300 ${
+                    added
+                      ? 'bg-tertiary text-on-tertiary'
+                      : 'bg-primary-fixed text-primary-container hover:bg-tertiary hover:text-on-tertiary'
+                  }`}
+                >
+                  {added ? '✓ ADDED TO BAG' : 'ADD TO SHOPPING BAG'}
+                </button>
+
+                <button
+                  onClick={() => toggle(product.id)}
+                  aria-label={wishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
+                  className="w-14 h-14 border border-outline-variant/40 flex items-center justify-center text-on-surface hover:text-tertiary transition-colors bg-surface-container-low"
+                >
+                  <HeartIcon
+                    className={`w-5 h-5 ${wishlisted ? 'text-tertiary fill-current' : ''}`}
+                    filled={wishlisted}
+                  />
+                </button>
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex gap-3 mb-4">
-              <button
-                onClick={handleAddToBag}
-                className={`flex-1 font-body text-[11px] tracking-[0.25em] uppercase py-4 transition-colors ${
-                  added ? 'bg-accent text-white' : 'bg-primaryBlack text-white hover:bg-secondaryBlack'
-                }`}
-              >
-                {added ? '✓ Added to Bag' : 'Add to Bag'}
-              </button>
-              <button
-                aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-                onClick={() => toggle(product.id)}
-                className="border border-primaryBlack/20 w-14 flex items-center justify-center hover:border-primaryBlack transition-colors"
-              >
-                <HeartIcon className={`w-5 h-5 ${wishlisted ? 'text-red-500' : 'text-primaryBlack'}`} filled={wishlisted} />
-              </button>
-            </div>
-
-            <button
-              className="w-full font-body text-[11px] tracking-[0.25em] uppercase py-4 border border-primaryBlack/25 text-secondaryText hover:border-primaryBlack hover:text-primaryBlack transition-colors mb-7"
-              onClick={() => alert('Checkout coming soon. Currently Cash on Delivery only. (Demo)')}
-            >
-              Buy Now
-            </button>
-
-            {/* Shipping info */}
-            <div className="border-t border-primaryBlack/10 pt-6 space-y-2 mb-8">
-              <p className="font-body text-xs text-secondaryText">🚚 <span className="text-primaryBlack">Free delivery</span> on orders over PKR 5,000. <span className="text-secondaryText/50">(Demo)</span></p>
-              <p className="font-body text-xs text-secondaryText">💳 <span className="text-primaryBlack">Cash on Delivery</span> available. <span className="text-secondaryText/50">(Demo)</span></p>
-              <p className="font-body text-xs text-secondaryText">🔄 <span className="text-primaryBlack">Easy returns</span> within 7 days. <span className="text-secondaryText/50">(Demo)</span></p>
-            </div>
-
-            {/* Tabs */}
-            <div className="border-t border-primaryBlack/10">
-              <div className="flex gap-5 border-b border-primaryBlack/10 mb-5">
+            {/* Accordion Specification Tabs */}
+            <div className="border-t border-outline-variant/20 pt-space-md">
+              <div className="flex border-b border-outline-variant/20 overflow-x-auto scrollbar-none">
                 {tabs.map((tab) => (
                   <button
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key)}
-                    className={`font-body text-[10px] tracking-[0.15em] uppercase pb-3 border-b-2 transition-colors ${
+                    className={`font-label-caps-sm text-label-caps-sm uppercase tracking-widest pb-space-sm px-space-sm transition-colors border-b-2 -mb-[2px] whitespace-nowrap ${
                       activeTab === tab.key
-                        ? 'border-primaryBlack text-primaryBlack'
-                        : 'border-transparent text-secondaryText hover:text-primaryBlack'
+                        ? 'border-tertiary text-on-surface'
+                        : 'border-transparent text-on-surface-variant hover:text-on-surface'
                     }`}
                   >
                     {tab.label}
                   </button>
                 ))}
               </div>
-              <p className="font-body text-sm text-secondaryText leading-relaxed">
+
+              <div className="py-space-md text-on-surface-variant font-body-sm text-body-sm font-light leading-relaxed">
                 {tabs.find((t) => t.key === activeTab)?.content}
-              </p>
+              </div>
             </div>
+
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Related */}
+      {/* ── Related Archive Pieces ──────────────────────────── */}
       {related.length > 0 && (
-        <section className="py-20 bg-white">
-          <div className="container mx-auto px-6 md:px-10">
-            <div className="mb-10">
-              <p className="font-body text-[10px] tracking-[0.4em] uppercase text-accent mb-2">You May Also Like</p>
-              <h2 className="font-heading text-4xl text-primaryBlack">Related Pieces</h2>
+        <section className="w-full bg-surface-container-low border-t border-outline-variant/20 px-margin md:px-margin-desktop py-space-2xl mt-space-xl">
+          <div className="flex items-end justify-between pb-space-lg border-b border-outline-variant/20 mb-space-xl">
+            <div>
+              <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] block mb-1">
+                COMPLEMENTARY PIECES
+              </span>
+              <h2 className="font-headline-lg text-headline-lg text-on-surface font-normal">
+                Related Archive Pieces
+              </h2>
             </div>
-            <ProductGridSection products={related} columns={4} />
+            <Link
+              href="/shop"
+              className="font-label-caps-sm text-label-caps-sm text-tertiary hover:underline uppercase tracking-widest"
+            >
+              VIEW ALL ARCHIVES →
+            </Link>
           </div>
+
+          <ProductGridSection products={related} columns={4} />
         </section>
       )}
     </div>

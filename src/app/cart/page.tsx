@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useCart } from '../../context/store';
 import { formatPrice } from '../../data/products';
@@ -7,158 +8,298 @@ import { CloseIcon } from '../../components/icons';
 
 export default function CartPage() {
   const { items, count, subtotal, removeItem, updateQuantity, clearCart } = useCart();
+  const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
+  const [orderSimulated, setOrderSimulated] = useState(false);
 
   const shipping = subtotal >= 5000 ? 0 : 250;
   const total    = subtotal + shipping;
 
-  /* ── Empty state ─────────────────────────────────────── */
+  /* ── Empty State ───────────────────────────────────────── */
   if (count === 0) {
     return (
-      <div className="bg-background min-h-screen flex flex-col items-center justify-center px-6 text-center pt-20">
-        <div className="mb-8">
-          <span className="font-heading text-[120px] text-primaryBlack/5 leading-none select-none">∅</span>
+      <div className="bg-surface min-h-screen text-on-surface flex flex-col items-center justify-center px-margin py-36 text-center">
+        <div className="mb-space-lg">
+          <span className="font-display-hero text-[100px] text-outline-variant/30 leading-none select-none">
+            ∅
+          </span>
         </div>
-        <p className="font-body text-[10px] tracking-[0.4em] uppercase text-accent mb-4">Your Bag</p>
-        <h1 className="font-heading text-5xl text-primaryBlack mb-4">Empty for now.</h1>
-        <p className="font-body text-secondaryText text-sm max-w-sm leading-relaxed mb-10">
-          Your bag is waiting to be filled. Explore our collection and add the pieces that speak to you.
+        <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] mb-2 block">
+          YOUR ARCHIVE BAG
+        </span>
+        <h1 className="font-headline-lg text-headline-lg text-primary-fixed mb-space-sm font-normal">
+          Your bag is empty.
+        </h1>
+        <p className="font-body-md text-body-md text-on-surface-variant max-w-md leading-relaxed mb-space-xl">
+          Discover our curated collection of architectural menswear and add foundational pieces designed to endure.
         </p>
         <Link
           href="/shop"
-          className="inline-block font-body text-[11px] tracking-[0.3em] uppercase bg-primaryBlack text-white px-12 py-4 hover:bg-secondaryBlack transition-colors"
+          className="px-space-xl py-space-md bg-tertiary text-on-tertiary font-label-caps-md text-label-caps-md tracking-[0.2em] uppercase hover:bg-primary-fixed transition-colors shadow-lg"
         >
-          Shop Collection
+          EXPLORE THE ARCHIVE
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="bg-background min-h-screen pt-28 pb-24">
-      <div className="container mx-auto px-6 md:px-10 max-w-5xl">
+    <div className="bg-surface min-h-screen text-on-surface pt-36 pb-space-2xl px-margin md:px-margin-desktop">
+      <div className="max-w-6xl mx-auto space-y-space-xl">
 
-        {/* Header */}
-        <div className="flex items-end justify-between mb-12">
+        {/* ── Header ───────────────────────────────────────── */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-outline-variant/20 pb-space-lg gap-space-sm">
           <div>
-            <p className="font-body text-[10px] tracking-[0.4em] uppercase text-accent mb-2">Review</p>
-            <h1 className="font-heading text-[clamp(44px,6vw,72px)] text-primaryBlack leading-none">
-              Your Bag
+            <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] block mb-1">
+              CLIENT SERVICES
+            </span>
+            <h1 className="font-display-hero text-headline-lg md:text-[54px] md:leading-[62px] text-primary-fixed font-normal tracking-tight">
+              Shopping Bag
             </h1>
           </div>
-          <button
-            onClick={clearCart}
-            className="font-body text-[11px] tracking-[0.15em] uppercase text-secondaryText hover:text-primaryBlack underline underline-offset-4 transition-colors"
-          >
-            Clear all
-          </button>
+          <div className="flex items-center gap-space-md">
+            <span className="font-body-sm text-body-sm text-on-surface-variant">
+              {count} {count === 1 ? 'garment' : 'garments'} selected
+            </span>
+            <button
+              onClick={clearCart}
+              className="font-label-caps-sm text-label-caps-sm text-on-surface-variant hover:text-tertiary uppercase tracking-widest transition-colors underline"
+            >
+              CLEAR BAG
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 items-start">
+        {/* ── Cart Content ─────────────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-start">
 
-          {/* ── Item list ──────────────────────────────── */}
-          <div className="md:col-span-3 space-y-6">
+          {/* Left Column: Line Items (7 cols) */}
+          <div className="lg:col-span-7 space-y-space-md">
             {items.map((item) => (
-              <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-5 bg-white p-5">
+              <div
+                key={`${item.id}-${item.size}-${item.color}`}
+                className="flex gap-space-md bg-surface-container-low border border-outline-variant/20 p-space-md transition-colors hover:border-tertiary/40"
+              >
                 {/* Image */}
-                <Link href={`/shop/${item.slug}`} className="shrink-0 overflow-hidden img-zoom w-24 h-32">
+                <Link
+                  href={`/shop/${item.slug}`}
+                  className="shrink-0 overflow-hidden aspect-[4/5] w-24 sm:w-28 bg-surface-container-lowest block border border-outline-variant/20"
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
                 </Link>
 
                 {/* Details */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between gap-2 mb-1">
-                    <Link href={`/shop/${item.slug}`} className="font-heading text-lg text-primaryBlack hover:text-accent transition-colors leading-tight">
-                      {item.name}
-                    </Link>
-                    <button
-                      onClick={() => removeItem(item.id, item.size, item.color)}
-                      aria-label="Remove item"
-                      className="text-secondaryText hover:text-primaryBlack transition-colors shrink-0"
-                    >
-                      <CloseIcon className="w-4 h-4" />
-                    </button>
+                <div className="flex-1 min-w-0 flex flex-col justify-between">
+                  <div>
+                    <div className="flex justify-between items-start gap-2 mb-1">
+                      <Link
+                        href={`/shop/${item.slug}`}
+                        className="font-headline-sm text-headline-sm text-on-surface hover:text-tertiary transition-colors leading-snug line-clamp-1"
+                      >
+                        {item.name}
+                      </Link>
+                      <button
+                        onClick={() => removeItem(item.id, item.size, item.color)}
+                        aria-label="Remove item"
+                        className="text-on-surface-variant hover:text-tertiary transition-colors p-1"
+                      >
+                        <CloseIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-space-md font-label-caps-sm text-label-caps-sm text-on-surface-variant uppercase tracking-wider">
+                      <span>SIZE: <strong className="text-on-surface">{item.size}</strong></span>
+                      {item.color && (
+                        <span>COLOUR: <strong className="text-on-surface">{item.color}</strong></span>
+                      )}
+                    </div>
                   </div>
 
-                  <p className="font-body text-xs text-secondaryText mb-1">
-                    Size: <span className="text-primaryBlack">{item.size}</span>
-                    {item.color && (
-                      <> &nbsp;·&nbsp; Colour: <span className="text-primaryBlack">{item.color}</span></>
-                    )}
-                  </p>
-
-                  <div className="flex items-center justify-between mt-4">
-                    {/* Qty */}
-                    <div className="flex items-center border border-primaryBlack/15">
+                  {/* Quantity & Item Subtotal */}
+                  <div className="flex items-center justify-between pt-space-sm border-t border-outline-variant/15 mt-space-sm">
+                    {/* Qty Counter */}
+                    <div className="flex items-center border border-outline-variant/40 bg-surface-container">
                       <button
                         onClick={() => updateQuantity(item.id, item.size, item.color, item.quantity - 1)}
-                        className="w-9 h-9 font-body text-lg flex items-center justify-center hover:bg-primaryBlack/5 transition-colors"
-                        aria-label="Decrease"
+                        className="w-8 h-8 flex items-center justify-center text-on-surface hover:text-tertiary transition-colors"
+                        aria-label="Decrease quantity"
                       >
                         −
                       </button>
-                      <span className="w-8 text-center font-body text-sm">{item.quantity}</span>
+                      <span className="w-8 text-center font-label-caps-sm text-label-caps-sm text-on-surface">
+                        {item.quantity}
+                      </span>
                       <button
                         onClick={() => updateQuantity(item.id, item.size, item.color, item.quantity + 1)}
-                        className="w-9 h-9 font-body text-lg flex items-center justify-center hover:bg-primaryBlack/5 transition-colors"
-                        aria-label="Increase"
+                        className="w-8 h-8 flex items-center justify-center text-on-surface hover:text-tertiary transition-colors"
+                        aria-label="Increase quantity"
                       >
                         +
                       </button>
                     </div>
-                    <span className="font-body text-sm font-medium text-primaryBlack">
-                      {formatPrice(item.price * item.quantity)}
-                    </span>
+
+                    <div className="text-right">
+                      <span className="font-body-md text-body-md text-on-surface font-light">
+                        {formatPrice(item.price * item.quantity)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
+
+            <div className="pt-space-sm">
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-space-xs font-label-caps-sm text-label-caps-sm text-tertiary hover:underline uppercase tracking-widest"
+              >
+                ← CONTINUE BROWSING THE ARCHIVE
+              </Link>
+            </div>
           </div>
 
-          {/* ── Order summary ───────────────────────────── */}
-          <div className="md:col-span-2 bg-white p-7 sticky top-28">
-            <h2 className="font-heading text-2xl text-primaryBlack mb-6">Order Summary</h2>
+          {/* Right Column: Order Summary (5 cols) */}
+          <div className="lg:col-span-5 bg-surface-container border border-outline-variant/30 p-space-xl space-y-space-lg lg:sticky lg:top-28">
+            <h2 className="font-headline-sm text-headline-sm text-on-surface font-normal border-b border-outline-variant/20 pb-space-sm">
+              Order Summary
+            </h2>
 
-            <div className="space-y-3 font-body text-sm mb-6">
+            <div className="space-y-space-sm font-body-sm text-body-sm text-on-surface-variant">
               <div className="flex justify-between">
-                <span className="text-secondaryText">Subtotal</span>
-                <span>{formatPrice(subtotal)}</span>
+                <span>Subtotal ({count} items)</span>
+                <span className="text-on-surface font-light">{formatPrice(subtotal)}</span>
               </div>
+
               <div className="flex justify-between">
-                <span className="text-secondaryText">Shipping</span>
-                <span>{shipping === 0 ? 'Free' : formatPrice(shipping)}</span>
+                <span>Shipping</span>
+                <span className="text-on-surface font-light">
+                  {shipping === 0 ? 'Demo — Waived' : formatPrice(shipping)}
+                </span>
               </div>
+
               {shipping > 0 && (
-                <p className="text-xs text-secondaryText/60 italic">
-                  Add {formatPrice(5000 - subtotal)} more for free shipping. (Demo)
+                <p className="font-caption text-caption text-tertiary tracking-wider uppercase">
+                  Demo estimate — shipping calculated at dispatch.
                 </p>
               )}
-              <div className="border-t border-primaryBlack/10 pt-3 flex justify-between font-medium text-base">
-                <span>Total</span>
-                <span>{formatPrice(total)}</span>
+
+              <div className="border-t border-outline-variant/20 pt-space-sm flex justify-between items-baseline font-body-lg text-body-lg text-on-surface">
+                <span className="font-normal">Estimated Total</span>
+                <span className="font-normal text-tertiary">{formatPrice(total)}</span>
               </div>
             </div>
 
-            <button
-              className="w-full font-body text-[11px] tracking-[0.3em] uppercase bg-primaryBlack text-white py-4 hover:bg-secondaryBlack transition-colors mb-3"
-              onClick={() => alert('Checkout coming soon. Currently Cash on Delivery only. This is a demo.')}
-            >
-              Proceed to Checkout
-            </button>
-            <Link
-              href="/shop"
-              className="block text-center font-body text-[11px] tracking-[0.2em] uppercase text-secondaryText hover:text-primaryBlack transition-colors py-2"
-            >
-              Continue Shopping
-            </Link>
+            <div className="space-y-space-sm pt-space-xs">
+              <button
+                onClick={() => setCheckoutModalOpen(true)}
+                className="w-full py-space-md bg-tertiary text-on-tertiary font-label-caps-md text-label-caps-md uppercase tracking-[0.2em] transition-colors hover:bg-primary-fixed"
+              >
+                PROCEED TO CHECKOUT
+              </button>
 
-            <p className="font-body text-[10px] text-secondaryText/40 text-center mt-5 leading-relaxed">
-              Demo only — no orders are placed or processed.
-              Cash on Delivery integration coming in a future phase.
-            </p>
+              <p className="font-caption text-caption text-on-surface-variant/60 text-center uppercase tracking-wider">
+                PAYMENT GATEWAYS: CASH ON DELIVERY &amp; BANK DISPATCH (DEMO MODE)
+              </p>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* ── Demo Checkout Modal ──────────────────────────────── */}
+      {checkoutModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary-container/85 backdrop-blur-md"
+          onClick={() => setCheckoutModalOpen(false)}
+        >
+          <div
+            className="bg-surface-container border border-outline-variant/40 p-space-xl max-w-lg w-full text-on-surface space-y-space-md shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-outline-variant/20 pb-space-sm">
+              <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-widest">
+                CHECKOUT SYSTEM PREVIEW
+              </span>
+              <button
+                onClick={() => setCheckoutModalOpen(false)}
+                className="text-on-surface-variant hover:text-on-surface p-1"
+              >
+                <CloseIcon className="w-5 h-5" />
+              </button>
+            </div>
+
+            {orderSimulated ? (
+              <div className="py-space-md text-center space-y-space-sm">
+                <div className="w-12 h-12 border border-tertiary flex items-center justify-center mx-auto text-tertiary text-xl">
+                  ✓
+                </div>
+                <h3 className="font-headline-sm text-headline-sm text-primary-fixed font-normal">
+                  Simulated Order Recorded
+                </h3>
+                <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                  Thank you for testing the SPOGMAI storefront. Because this is a frontend demonstration, no real payment was processed, no delivery dispatch will occur, and your cart has been cleared.
+                </p>
+                <div className="pt-space-md">
+                  <button
+                    onClick={() => {
+                      clearCart();
+                      setCheckoutModalOpen(false);
+                      setOrderSimulated(false);
+                    }}
+                    className="px-space-xl py-space-md bg-tertiary text-on-tertiary font-label-caps-sm text-label-caps-sm uppercase tracking-widest hover:bg-primary-fixed"
+                  >
+                    RETURN TO STORE
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-space-md">
+                <h3 className="font-headline-sm text-headline-sm text-primary-fixed font-normal">
+                  Demo Storefront Notice
+                </h3>
+                <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                  The SPOGMAI shopping bag calculation and item state are fully active in your browser. Live payment processing and automated order fulfillment APIs are currently not connected to this deployment.
+                </p>
+
+                <div className="bg-surface-container-low p-space-md border border-outline-variant/20 space-y-1 font-body-sm text-body-sm">
+                  <div className="flex justify-between">
+                    <span className="text-on-surface-variant">Selected Items:</span>
+                    <span className="text-on-surface">{count}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-on-surface-variant">Simulated Total:</span>
+                    <span className="text-tertiary">{formatPrice(total)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-on-surface-variant">Delivery Mode:</span>
+                    <span className="text-on-surface">Cash on Delivery (Pakistan)</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-space-sm pt-space-xs">
+                  <button
+                    onClick={() => setOrderSimulated(true)}
+                    className="flex-1 py-space-md bg-tertiary text-on-tertiary font-label-caps-sm text-label-caps-sm uppercase tracking-widest hover:bg-primary-fixed transition-colors"
+                  >
+                    CONFIRM SIMULATION
+                  </button>
+                  <button
+                    onClick={() => setCheckoutModalOpen(false)}
+                    className="flex-1 py-space-md bg-surface-container-high border border-outline-variant/30 text-on-surface font-label-caps-sm text-label-caps-sm uppercase tracking-widest hover:border-tertiary transition-colors"
+                  >
+                    KEEP SHOPPING
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

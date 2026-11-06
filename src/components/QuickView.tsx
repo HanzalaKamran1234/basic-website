@@ -20,11 +20,15 @@ const QuickViewContent: React.FC<{ product: Product; onClose: () => void }> = ({
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [sizeError,     setSizeError]     = useState(false);
   const [added,         setAdded]         = useState(false);
+  const [qty,           setQty]           = useState(1);
 
   const wishlisted = has(product.id);
 
   const handleAddToBag = () => {
-    if (!selectedSize) { setSizeError(true); return; }
+    if (!selectedSize) {
+      setSizeError(true);
+      return;
+    }
     setSizeError(false);
     addItem({
       id:    product.id,
@@ -34,6 +38,7 @@ const QuickViewContent: React.FC<{ product: Product; onClose: () => void }> = ({
       image: product.images[0],
       size:  selectedSize,
       color: selectedColor ?? (product.colors[0]?.name ?? ''),
+      quantity: qty,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -42,139 +47,228 @@ const QuickViewContent: React.FC<{ product: Product; onClose: () => void }> = ({
   return (
     <>
       {/* Header */}
-      <div className="flex items-center justify-between px-7 py-5 border-b border-primaryBlack/10 shrink-0">
-        <span className="font-body text-[10px] text-secondaryText tracking-[0.25em] uppercase">Quick View</span>
-        <button onClick={onClose} aria-label="Close" className="text-secondaryText hover:text-primaryBlack transition-colors">
+      <div className="flex items-center justify-between px-space-lg py-space-md border-b border-outline-variant/30 shrink-0 bg-surface-container-low">
+        <div className="flex items-center gap-space-sm">
+          <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-widest">
+            QUICK VIEW
+          </span>
+          <span className="text-outline-variant/60">•</span>
+          <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">
+            {product.category}
+          </span>
+        </div>
+        <button
+          onClick={onClose}
+          aria-label="Close dialog"
+          className="text-on-surface-variant hover:text-on-surface transition-colors p-1"
+        >
           <CloseIcon className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Image */}
-      <div className="aspect-[4/3] bg-white overflow-hidden shrink-0 img-zoom">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-      </div>
-
-      {/* Info */}
-      <div className="p-7 flex-1 flex flex-col gap-5">
-        <div>
-          <h2 className="font-heading text-2xl text-primaryBlack">{product.name}</h2>
-          <div className="flex items-center gap-2 mt-1">
-            {product.salePrice ? (
-              <>
-                <span className="font-body font-semibold text-primaryBlack">{formatPrice(product.salePrice)}</span>
-                <span className="font-body text-xs text-secondaryText line-through">{formatPrice(product.price)}</span>
-              </>
-            ) : (
-              <span className="font-body text-primaryBlack">{formatPrice(product.price)}</span>
-            )}
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 overflow-y-auto max-h-[80vh]">
+        {/* Image */}
+        <div className="relative aspect-[4/5] bg-surface-container-lowest overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
         </div>
 
-        {/* Colour */}
-        {product.colors.length > 0 && (
-          <div>
-            <p className="font-body text-[10px] text-secondaryText tracking-[0.15em] uppercase mb-2">
-              Colour: <span className="text-primaryBlack">{selectedColor ?? 'Select'}</span>
+        {/* Info */}
+        <div className="p-space-lg flex flex-col justify-between space-y-space-md">
+          <div className="space-y-space-sm">
+            <h2 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+              {product.name}
+            </h2>
+
+            <div className="flex items-baseline gap-space-sm">
+              {product.salePrice ? (
+                <>
+                  <span className="font-body-lg text-body-lg text-tertiary font-light">
+                    {formatPrice(product.salePrice)}
+                  </span>
+                  <span className="font-body-sm text-body-sm text-on-surface-variant/60 line-through">
+                    {formatPrice(product.price)}
+                  </span>
+                </>
+              ) : (
+                <span className="font-body-lg text-body-lg text-on-surface font-light">
+                  {formatPrice(product.price)}
+                </span>
+              )}
+            </div>
+
+            <p className="font-body-sm text-body-sm text-on-surface-variant font-light leading-relaxed">
+              {product.description}
             </p>
-            <div className="flex gap-2 flex-wrap">
-              {product.colors.map((c) => (
+
+            {/* Colour selection */}
+            {product.colors.length > 0 && (
+              <div className="pt-space-xs">
+                <p className="font-label-caps-sm text-label-caps-sm text-on-surface-variant uppercase tracking-wider mb-2">
+                  COLOUR: <span className="text-on-surface">{selectedColor ?? product.colors[0]?.name}</span>
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  {product.colors.map((c) => (
+                    <button
+                      key={c.name}
+                      title={c.name}
+                      onClick={() => setSelectedColor(c.name)}
+                      className={`w-7 h-7 border transition-all ${
+                        (selectedColor ?? product.colors[0]?.name) === c.name
+                          ? 'border-tertiary scale-110 shadow-sm'
+                          : 'border-outline-variant/40 hover:border-outline'
+                      }`}
+                      style={{ backgroundColor: c.hex }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Size selection */}
+            <div className="pt-space-xs">
+              <div className="flex items-center justify-between mb-2">
+                <p className={`font-label-caps-sm text-label-caps-sm uppercase tracking-wider ${
+                  sizeError ? 'text-error font-medium' : 'text-on-surface-variant'
+                }`}>
+                  SIZE: {selectedSize ? <span className="text-on-surface">{selectedSize}</span> : <span className={sizeError ? 'text-error' : ''}>REQUIRED</span>}
+                </p>
+                <Link
+                  href="/size-guide"
+                  onClick={onClose}
+                  className="font-label-caps-sm text-label-caps-sm text-tertiary hover:underline tracking-widest uppercase"
+                >
+                  SIZE GUIDE
+                </Link>
+              </div>
+
+              <div className="flex gap-2 flex-wrap">
+                {product.sizes.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => {
+                      setSelectedSize(s);
+                      setSizeError(false);
+                    }}
+                    className={`min-w-10 h-10 px-3 font-label-caps-sm text-label-caps-sm uppercase tracking-wider border transition-colors ${
+                      selectedSize === s
+                        ? 'bg-tertiary text-on-tertiary border-tertiary'
+                        : 'bg-surface-container-high border-outline-variant/40 text-on-surface hover:border-tertiary/60'
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+              {sizeError && (
+                <p className="font-caption text-caption text-error tracking-wider uppercase mt-1.5">
+                  Please select a size to proceed.
+                </p>
+              )}
+            </div>
+
+            {/* Quantity */}
+            <div className="pt-space-xs flex items-center gap-space-md">
+              <span className="font-label-caps-sm text-label-caps-sm text-on-surface-variant uppercase tracking-wider">
+                QUANTITY:
+              </span>
+              <div className="flex items-center border border-outline-variant/40 bg-surface-container-low">
                 <button
-                  key={c.name}
-                  title={c.name}
-                  onClick={() => setSelectedColor(c.name)}
-                  className={`w-7 h-7 rounded-full border-2 transition-all ${
-                    selectedColor === c.name ? 'border-primaryBlack scale-110' : 'border-primaryBlack/15'
-                  }`}
-                  style={{ backgroundColor: c.hex }}
-                />
-              ))}
+                  type="button"
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  className="w-8 h-8 flex items-center justify-center text-on-surface hover:text-tertiary transition-colors"
+                >
+                  −
+                </button>
+                <span className="w-8 text-center font-label-caps-sm text-label-caps-sm text-on-surface">
+                  {qty}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQty((q) => q + 1)}
+                  className="w-8 h-8 flex items-center justify-center text-on-surface hover:text-tertiary transition-colors"
+                >
+                  +
+                </button>
+              </div>
             </div>
           </div>
-        )}
 
-        {/* Size */}
-        <div>
-          <p className={`font-body text-[10px] tracking-[0.15em] uppercase mb-2 ${sizeError ? 'text-red-500' : 'text-secondaryText'}`}>
-            Size: <span className={sizeError ? 'text-red-500' : 'text-primaryBlack'}>
-              {selectedSize ?? (sizeError ? 'Please select' : 'Select')}
-            </span>
-          </p>
-          <div className="flex gap-2 flex-wrap">
-            {product.sizes.map((s) => (
+          {/* Action buttons */}
+          <div className="pt-space-md space-y-space-xs border-t border-outline-variant/20">
+            <div className="flex gap-space-sm">
               <button
-                key={s}
-                onClick={() => { setSelectedSize(s); setSizeError(false); }}
-                className={`w-10 h-10 font-body text-xs border transition-colors ${
-                  selectedSize === s
-                    ? 'bg-primaryBlack text-white border-primaryBlack'
-                    : 'bg-white text-primaryBlack border-primaryBlack/20 hover:border-primaryBlack'
+                onClick={handleAddToBag}
+                className={`flex-1 py-space-md font-label-caps-md text-label-caps-md uppercase tracking-[0.2em] transition-all duration-300 ${
+                  added
+                    ? 'bg-tertiary text-on-tertiary'
+                    : 'bg-primary-fixed text-primary-container hover:bg-tertiary hover:text-on-tertiary'
                 }`}
               >
-                {s}
+                {added ? '✓ ADDED TO BAG' : 'ADD TO BAG'}
               </button>
-            ))}
+
+              <button
+                onClick={() => toggle(product.id)}
+                aria-label={wishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
+                className="w-12 h-12 border border-outline-variant/40 flex items-center justify-center text-on-surface hover:text-tertiary transition-colors bg-surface-container-high"
+              >
+                <HeartIcon
+                  className={`w-5 h-5 ${wishlisted ? 'text-tertiary fill-current' : ''}`}
+                  filled={wishlisted}
+                />
+              </button>
+            </div>
+
+            <Link
+              href={`/shop/${product.slug}`}
+              onClick={onClose}
+              className="block text-center py-2 font-label-caps-sm text-label-caps-sm text-on-surface-variant hover:text-tertiary uppercase tracking-widest transition-colors"
+            >
+              VIEW FULL PRODUCT SPECIFICATION →
+            </Link>
           </div>
         </div>
-
-        {/* Actions */}
-        <div className="flex gap-3 mt-auto">
-          <button
-            onClick={handleAddToBag}
-            className={`flex-1 font-body text-[10px] tracking-[0.2em] uppercase py-4 transition-colors ${
-              added ? 'bg-accent text-white' : 'bg-primaryBlack text-white hover:bg-secondaryBlack'
-            }`}
-          >
-            {added ? '✓ Added to Bag' : 'Add to Bag'}
-          </button>
-          <button
-            aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-            onClick={() => toggle(product.id)}
-            className="border border-primaryBlack/20 w-12 flex items-center justify-center hover:border-primaryBlack transition-colors"
-          >
-            <HeartIcon className={`w-4 h-4 ${wishlisted ? 'text-red-500' : 'text-primaryBlack'}`} filled={wishlisted} />
-          </button>
-        </div>
-
-        <Link
-          href={`/shop/${product.slug}`}
-          className="text-center font-body text-[10px] tracking-[0.15em] text-secondaryText hover:text-primaryBlack underline underline-offset-4 transition-colors"
-          onClick={onClose}
-        >
-          View Full Details
-        </Link>
       </div>
     </>
   );
 };
 
 export const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
-  /* Lock scroll while open */
   useEffect(() => {
-    if (product) document.body.style.overflow = 'hidden';
-    else         document.body.style.overflow = '';
-    return () => { document.body.style.overflow = ''; };
-  }, [product]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (product) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [product, onClose]);
 
   if (!product) return null;
 
   return (
-    <>
-      {/* Backdrop */}
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Quick view: ${product.name}`}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary-container/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
       <div
-        className="fixed inset-0 z-[80] bg-primaryBlack/60 backdrop-blur-sm"
-        onClick={onClose}
-        aria-hidden="true"
-        style={{ animation: 'fadeIn 0.25s ease forwards' }}
-      />
-
-      {/* Panel */}
-      <div
-        className="fixed inset-y-0 right-0 z-[90] w-full max-w-md bg-background shadow-2xl overflow-y-auto flex flex-col"
-        style={{ animation: 'revealR 0.4s cubic-bezier(0.16,1,0.3,1) forwards' }}
+        className="relative bg-surface-container border border-outline-variant/40 text-on-surface max-w-2xl w-full shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
       >
         <QuickViewContent key={product.id} product={product} onClose={onClose} />
       </div>
-    </>
+    </div>
   );
 };

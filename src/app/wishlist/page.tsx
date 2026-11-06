@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useWishlist } from '../../context/store';
 import { products } from '../../data/products';
 import { ProductCard } from '../../components/ProductCard';
-import { useState } from 'react';
 import { QuickView } from '../../components/QuickView';
 import type { Product } from '../../data/products';
 
@@ -12,40 +12,57 @@ export default function WishlistPage() {
   const { ids } = useWishlist();
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
+  const count = ids.length;
   const wishlisted = products.filter((p) => ids.includes(p.id));
 
   if (wishlisted.length === 0) {
     return (
-      <div className="bg-background min-h-screen flex flex-col items-center justify-center px-6 text-center pt-20">
-        <p className="font-body text-[10px] tracking-[0.4em] uppercase text-accent mb-4">Wishlist</p>
-        <h1 className="font-heading text-5xl text-primaryBlack mb-4">Nothing saved yet.</h1>
-        <p className="font-body text-secondaryText text-sm max-w-sm leading-relaxed mb-10">
-          Tap the heart icon on any product to save it here for later.
+      <div className="bg-surface min-h-screen text-on-surface flex flex-col items-center justify-center px-margin py-36 text-center">
+        <div className="mb-space-lg">
+          <span className="font-display-hero text-[100px] text-outline-variant/30 leading-none select-none">
+            ♡
+          </span>
+        </div>
+        <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] mb-2 block">
+          CLIENT CURATION
+        </span>
+        <h1 className="font-headline-lg text-headline-lg text-primary-fixed mb-space-sm font-normal">
+          Your wishlist is empty.
+        </h1>
+        <p className="font-body-md text-body-md text-on-surface-variant max-w-md leading-relaxed mb-space-xl">
+          Save your preferred garments from our archive to revisit their specifications, proportions, and availability.
         </p>
         <Link
           href="/shop"
-          className="inline-block font-body text-[11px] tracking-[0.3em] uppercase bg-primaryBlack text-white px-12 py-4 hover:bg-secondaryBlack transition-colors"
+          className="px-space-xl py-space-md bg-tertiary text-on-tertiary font-label-caps-md text-label-caps-md tracking-[0.2em] uppercase hover:bg-primary-fixed transition-colors shadow-lg"
         >
-          Explore Collection
+          EXPLORE THE ARCHIVE
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="bg-background min-h-screen pt-28 pb-24">
-      <div className="container mx-auto px-6 md:px-10">
-        <div className="mb-14">
-          <p className="font-body text-[10px] tracking-[0.4em] uppercase text-accent mb-2">Saved</p>
-          <h1 className="font-heading text-[clamp(44px,6vw,72px)] text-primaryBlack leading-none">
-            Your Wishlist
-          </h1>
-          <p className="font-body text-sm text-secondaryText mt-3">
-            {wishlisted.length} {wishlisted.length === 1 ? 'piece' : 'pieces'} saved
+    <div className="bg-surface min-h-screen text-on-surface pt-36 pb-space-2xl px-margin md:px-margin-desktop">
+      <div className="max-w-7xl mx-auto space-y-space-xl">
+
+        {/* ── Header ───────────────────────────────────────── */}
+        <div className="border-b border-outline-variant/20 pb-space-lg flex flex-col sm:flex-row sm:items-end justify-between gap-space-sm">
+          <div>
+            <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] block mb-1">
+              CLIENT SERVICES
+            </span>
+            <h1 className="font-display-hero text-headline-lg md:text-[54px] md:leading-[62px] text-primary-fixed font-normal tracking-tight">
+              Client Wishlist
+            </h1>
+          </div>
+          <p className="font-body-sm text-body-sm text-on-surface-variant">
+            {count} {count === 1 ? 'garment' : 'garments'} saved in your local curation
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* ── Product Grid ─────────────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-desktop">
           {wishlisted.map((product) => (
             <ProductCard
               key={product.id}
@@ -56,7 +73,10 @@ export default function WishlistPage() {
         </div>
       </div>
 
-      <QuickView product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
+      <QuickView
+        product={quickViewProduct}
+        onClose={() => setQuickViewProduct(null)}
+      />
     </div>
   );
 }

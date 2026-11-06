@@ -1,167 +1,134 @@
 import Link from 'next/link';
 
-const UNSPLASH = (id: string, w = 1200) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
+const ABOUT_HERO_IMG = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1800&q=85';
+const ABOUT_CRAFT_IMG = 'https://images.unsplash.com/photo-1620799139507-2a76f79a2f4d?auto=format&fit=crop&w=1200&q=85';
 
 export const metadata = {
-  title: 'About — SPOGMAI',
-  description: 'The story behind SPOGMAI — premium menswear built on confidence, craft, and timeless design.',
+  title: 'Our Story & Philosophy — SPOGMAI',
+  description: 'The philosophy behind SPOGMAI — architectural menswear built on restraint, discipline, and perennial quality.',
 };
 
 export default function AboutPage() {
   return (
-    <div className="bg-background min-h-screen">
-
-      {/* Page Hero */}
-      <div className="relative h-[70vh] min-h-96 overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={UNSPLASH('photo-1507003211169-0a1dd7228f2d', 1600)}
-          alt="SPOGMAI brand"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-primaryBlack/60 flex items-end">
-          <div className="container mx-auto px-6 pb-16">
-            <p className="font-body text-xs tracking-[0.4em] uppercase text-accent mb-3">
-              Our Story
-            </p>
-            <h1 className="font-heading text-7xl md:text-9xl text-white leading-none">
-              Wear the<br />Legacy.
-            </h1>
-          </div>
+    <div className="bg-surface min-h-screen text-on-surface flex flex-col">
+      {/* ── Page Hero ─────────────────────────────────────── */}
+      <section className="relative w-full min-h-[70vh] flex items-end overflow-hidden bg-primary-container px-margin md:px-margin-desktop pb-space-2xl pt-36">
+        <div className="absolute inset-0 z-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={ABOUT_HERO_IMG}
+            alt="SPOGMAI Sartorial Atelier"
+            className="w-full h-full object-cover object-top opacity-40 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-surface via-transparent to-surface/40" />
         </div>
-      </div>
 
-      {/* Story Section 1 */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
-            <div>
-              <p className="text-accent tracking-[0.3em] text-xs uppercase font-body mb-5">
-                The Beginning
+        <div className="relative z-10 max-w-4xl space-y-space-sm">
+          <span className="font-label-caps-sm text-label-caps-sm text-tertiary tracking-[0.28em] uppercase block">
+            ATELIER PHILOSOPHY
+          </span>
+          <h1 className="font-display-hero text-headline-lg md:text-[80px] md:leading-[88px] text-primary-fixed font-normal tracking-tight">
+            Wear the <span className="italic font-light text-tertiary">Legacy.</span>
+          </h1>
+          <p className="font-body-lg text-body-lg text-on-surface-variant font-light max-w-xl pt-2">
+            Menswear engineered with architectural restraint. Designed to outlive fleeting seasonal trends and earn a permanent place in a discerning wardrobe.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Story Narrative ─────────────────────────────────── */}
+      <section className="w-full px-margin md:px-margin-desktop py-space-2xl border-t border-outline-variant/15 bg-surface">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-center">
+          <div className="lg:col-span-7 space-y-space-md">
+            <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] block">
+              ORIGIN &amp; PURPOSE
+            </span>
+            <h2 className="font-headline-lg text-headline-lg md:text-[48px] md:leading-[56px] text-primary-fixed font-normal">
+              Built for Intentional Presence.
+            </h2>
+            <div className="space-y-space-sm text-on-surface-variant font-body-md text-body-md font-light leading-relaxed">
+              <p>
+                SPOGMAI was conceived around a single conviction: modern menswear should be deliberate, refined, and enduring. In a landscape dominated by rapid disposable trends, we champion sartorial discipline.
               </p>
-              <h2 className="font-heading text-5xl text-primaryBlack mb-6 leading-tight">
-                Built for the Confident Man.
-              </h2>
-              <p className="font-body text-secondaryText leading-relaxed mb-4">
-                SPOGMAI was founded on a singular belief: that menswear should be both intentional and effortless.
-                In a world of fast fashion and disposable trends, we set out to create something different —
-                clothing that earns its place in a wardrobe for years, not seasons.
+              <p>
+                Every silhouette is developed through rigorous proportional study. From the precise shoulder drop of our 320 GSM combed tees to the sculpted drape of our pleated trousers, we design garments that respect the wearer and elevate daily living.
               </p>
-              <p className="font-body text-secondaryText leading-relaxed">
-                Every piece we create is chosen with care. Every fabric is considered. Every silhouette is
-                refined until it reaches the standard we demand — one that respects the man wearing it and
-                the time he invests in getting dressed.
+              <p>
+                We do not pursue excessive adornment. Instead, our pieces command recognition through clean geometry, tactile integrity, and quiet confidence.
               </p>
             </div>
-            <div className="aspect-[4/5] overflow-hidden bg-white">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={UNSPLASH('photo-1620799139507-2a76f79a2f4d')}
-                alt="SPOGMAI craftsmanship"
-                className="w-full h-full object-cover"
-              />
-            </div>
+          </div>
+
+          <div className="lg:col-span-5 relative aspect-[4/5] bg-surface-container-low overflow-hidden border border-outline-variant/20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={ABOUT_CRAFT_IMG}
+              alt="Artisan tailoring textile detail"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* Values */}
-      <section className="py-24 bg-primaryBlack text-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-accent tracking-[0.3em] text-xs uppercase font-body mb-3">
+      {/* ── Core Values ─────────────────────────────────────── */}
+      <section className="w-full bg-surface-container-low px-margin md:px-margin-desktop py-space-2xl border-t border-outline-variant/15">
+        <div className="max-w-5xl mx-auto space-y-space-2xl">
+          <div className="text-center space-y-space-xs max-w-2xl mx-auto">
+            <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] block">
+              FOUNDATIONAL PILLARS
+            </span>
+            <h2 className="font-headline-lg text-headline-lg text-primary-fixed font-normal">
               What We Stand For
-            </p>
-            <h2 className="font-heading text-5xl md:text-6xl">Our Values</h2>
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl mx-auto">
-            {[
-              {
-                num: '01',
-                title: 'Uncompromising Quality',
-                desc: 'We select only the finest natural fabrics — premium cottons, European linens, and refined wool blends. Quality is not a feature; it is the foundation.',
-              },
-              {
-                num: '02',
-                title: 'Timeless Aesthetic',
-                desc: 'We do not chase trends. SPOGMAI is built for longevity — styles that make sense today, tomorrow, and in ten years. The antidote to disposable fashion.',
-              },
-              {
-                num: '03',
-                title: 'Intentional Design',
-                desc: 'Every detail is deliberate. From collar construction to button placement, each design decision serves both function and form.',
-              },
-            ].map(({ num, title, desc }) => (
-              <div key={num} className="border-t border-white/15 pt-8">
-                <span className="font-heading text-6xl text-white/15 leading-none block mb-4">{num}</span>
-                <h3 className="font-heading text-2xl mb-4">{title}</h3>
-                <p className="font-body text-white/60 text-sm leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Story Section 2 */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
-            <div className="order-2 md:order-1 aspect-[4/5] overflow-hidden bg-background">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={UNSPLASH('photo-1552374196-1ab2a1c593e8')}
-                alt="SPOGMAI style"
-                className="w-full h-full object-cover"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter-desktop">
+            <div className="bg-surface-container p-space-xl space-y-space-sm border border-outline-variant/20">
+              <span className="font-display-hero text-headline-md text-tertiary block font-light">
+                01
+              </span>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                Uncompromising Quality
+              </h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant font-light leading-relaxed">
+                We select natural, heavyweight fibers, durable weave structures, and refined yarns. Quality is not a marketing feature; it is the core foundation.
+              </p>
             </div>
-            <div className="order-1 md:order-2">
-              <p className="text-accent tracking-[0.3em] text-xs uppercase font-body mb-5">
-                Our Approach
+
+            <div className="bg-surface-container p-space-xl space-y-space-sm border border-outline-variant/20">
+              <span className="font-display-hero text-headline-md text-tertiary block font-light">
+                02
+              </span>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                Perennial Aesthetic
+              </h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant font-light leading-relaxed">
+                We design outside the churn of seasonal fashion calendars. Our garments are engineered to look as relevant in a decade as they do today.
               </p>
-              <h2 className="font-heading text-5xl text-primaryBlack mb-6 leading-tight">
-                Premium. Minimal. Purposeful.
-              </h2>
-              <p className="font-body text-secondaryText leading-relaxed mb-4">
-                We believe the most powerful statement a man can make with clothing is restraint.
-                Not restraint of ambition — restraint of excess. The right piece, worn with confidence,
-                says everything.
+            </div>
+
+            <div className="bg-surface-container p-space-xl space-y-space-sm border border-outline-variant/20">
+              <span className="font-display-hero text-headline-md text-tertiary block font-light">
+                03
+              </span>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                Intentional Restraint
+              </h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant font-light leading-relaxed">
+                Every detail is deliberate. From clean plackets to weighted hems, our design process removes the superfluous to let pure form speak.
               </p>
-              <p className="font-body text-secondaryText leading-relaxed mb-8">
-                SPOGMAI curates each collection with this in mind. No unnecessary embellishment.
-                No trend-chasing. Just precise, beautifully constructed menswear that empowers the man
-                wearing it.
-              </p>
-              <Link
-                href="/shop"
-                className="inline-block font-body text-xs tracking-[0.3em] uppercase bg-primaryBlack text-white px-10 py-4 hover:bg-secondaryBlack transition-colors"
-              >
-                Explore the Collection
-              </Link>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* CTA */}
-      <section className="py-20 bg-background text-center border-t border-primaryBlack/10">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <p className="text-accent tracking-[0.3em] text-xs uppercase font-body mb-4">
-            Get in Touch
-          </p>
-          <h2 className="font-heading text-4xl text-primaryBlack mb-6">
-            Questions or Enquiries?
-          </h2>
-          <p className="font-body text-secondaryText mb-8 text-sm leading-relaxed">
-            We&apos;d love to hear from you. Reach out for sizing advice, order information, or anything else.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-block font-body text-xs tracking-[0.3em] uppercase border border-primaryBlack px-10 py-4 hover:bg-primaryBlack hover:text-white transition-colors"
-          >
-            Contact Us
-          </Link>
+          <div className="pt-space-lg text-center">
+            <Link
+              href="/shop"
+              className="inline-block px-space-xl py-space-md bg-tertiary text-on-tertiary font-label-caps-md text-label-caps-md tracking-[0.2em] uppercase hover:bg-primary-fixed transition-colors"
+            >
+              EXPLORE THE CURRENT COLLECTION →
+            </Link>
+          </div>
         </div>
       </section>
     </div>

@@ -1,32 +1,106 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════
-   SPOGMAI — Design System
-   Tailwind v4  |  @theme block defines all brand tokens
+   SPOGMAI — STITCH ARCHITECTURAL DESIGN FOUNDATION
+   Tailwind CSS v4  |  Quiet Architectural Luxury
+   Reference: _stitch_reference/DESIGN.md & code.html
 ═══════════════════════════════════════════════════════════ */
 
 @theme {
-  /* ── Palette ─────────────────────────────────────────── */
-  --color-primaryBlack:   #080808;
-  --color-secondaryBlack: #151515;
-  --color-background:     #F5F3EF;
-  --color-secondaryText:  #777777;
-  --color-accent:         #B8A58A;
-  --color-accentLight:    #D4C4AE;
-  --color-ivory:          #FDFBF8;
-  --color-border:         rgba(8,8,8,0.10);
+  /* ── 1. Stitch Tonal Palette ───────────────────────────── */
+  --color-surface:                   #131313;
+  --color-surface-dim:               #131313;
+  --color-surface-bright:            #393939;
+  --color-surface-container-lowest:  #0e0e0e;
+  --color-surface-container-low:     #1c1b1b;
+  --color-surface-container:         #201f1f;
+  --color-surface-container-high:    #2a2a2a;
+  --color-surface-container-highest: #353534;
+  --color-surface-variant:           #353534;
+  --color-on-surface:                #e5e2e1;
+  --color-on-surface-variant:        #c4c7c7;
+  --color-inverse-surface:           #e5e2e1;
+  --color-inverse-on-surface:        #313030;
 
-  /* ── Typography ──────────────────────────────────────── */
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'Inter', system-ui, sans-serif;
+  --color-primary:                   #c9c6c5;
+  --color-on-primary:                #313030;
+  --color-primary-container:         #080808;
+  --color-on-primary-container:      #7a7878;
+  --color-primary-fixed:             #e5e2e1;
+  --color-primary-fixed-dim:         #c9c6c5;
+  --color-on-primary-fixed:          #1c1b1b;
+  --color-on-primary-fixed-variant:  #474646;
 
-  /* ── Custom animations ───────────────────────────────── */
-  --animate-fade-up:       fadeUp    0.7s cubic-bezier(0.16,1,0.3,1) forwards;
-  --animate-fade-in:       fadeIn    0.6s ease forwards;
-  --animate-reveal-right:  revealR   0.8s cubic-bezier(0.16,1,0.3,1) forwards;
-  --animate-draw-line:     drawLine  1.2s ease forwards;
+  --color-secondary:                 #c8c6c3;
+  --color-on-secondary:              #30312e;
+  --color-secondary-container:       #474744;
+  --color-on-secondary-container:    #b6b5b1;
+  --color-secondary-fixed:           #e4e2de;
+  --color-secondary-fixed-dim:       #c8c6c3;
+  --color-on-secondary-fixed:        #1b1c1a;
+  --color-on-secondary-fixed-variant:#474744;
 
-  /* ── Keyframes ───────────────────────────────────────── */
+  --color-tertiary:                  #B8A58A;
+  --color-tertiary-dim:              #d8c4a7;
+  --color-on-tertiary:               #3b2e1a;
+  --color-tertiary-container:        #0e0700;
+  --color-on-tertiary-container:     #87765e;
+  --color-tertiary-fixed:            #f5dfc2;
+  --color-tertiary-fixed-dim:        #d8c4a7;
+
+  --color-outline:                   #8e9192;
+  --color-outline-variant:           #444748;
+
+  /* ── 2. Brand Core & Backward-Compatible Aliases ──────── */
+  --color-background:                #080808;
+  --color-on-background:             #e5e2e1;
+  --color-primaryBlack:              #080808;
+  --color-secondaryBlack:            #171717;
+  --color-surface-secondary:         #171717;
+  --color-surface-elevated:          #201f1f;
+  --color-warm-ivory:                #F5F3EF;
+  --color-ivory:                     #F5F3EF;
+  --color-secondaryText:             #858585;
+  --color-accent:                    #B8A58A;
+  --color-accentLight:               #D4C4AE;
+  --color-border:                    rgba(245, 243, 239, 0.08);
+  --color-border-hairline:           rgba(245, 243, 239, 0.08);
+  --color-border-elevated:           rgba(184, 165, 138, 0.35);
+
+  /* ── 3. Stitch Spacing Scale ───────────────────────────── */
+  --spacing-gutter:                  1.5rem;
+  --spacing-gutter-desktop:          2.5rem;
+  --spacing-margin:                  1.5rem;
+  --spacing-margin-tablet:           3rem;
+  --spacing-margin-desktop:          5rem;
+  --spacing-space-xs:                0.25rem;
+  --spacing-space-sm:                0.5rem;
+  --spacing-space-md:                1rem;
+  --spacing-space-lg:                2rem;
+  --spacing-space-xl:                4rem;
+  --spacing-space-2xl:               6rem;
+
+  /* ── 4. Typography Foundations ─────────────────────────── */
+  --font-heading:                    'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+  --font-body:                       'Inter', system-ui, sans-serif;
+  --font-display-hero:               'EB Garamond', Georgia, serif;
+  --font-headline-lg:                'EB Garamond', Georgia, serif;
+  --font-headline-md:                'EB Garamond', Georgia, serif;
+  --font-headline-sm:                'EB Garamond', Georgia, serif;
+  --font-body-lg:                    'Inter', system-ui, sans-serif;
+  --font-body-md:                    'Inter', system-ui, sans-serif;
+  --font-body-sm:                    'Inter', system-ui, sans-serif;
+  --font-label-caps-lg:              'Inter', system-ui, sans-serif;
+  --font-label-caps-md:              'Inter', system-ui, sans-serif;
+  --font-label-caps-sm:              'Inter', system-ui, sans-serif;
+  --font-caption:                    'Inter', system-ui, sans-serif;
+
+  /* ── 5. Animation Keyframes ────────────────────────────── */
+  --animate-fade-up:                 fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in:                 fadeIn 0.6s ease forwards;
+  --animate-reveal-right:            revealR 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-draw-line:               drawLine 1.2s ease forwards;
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -54,26 +128,71 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BASE
+   BASE LAYER — ARCHITECTURAL GEOMETRY & GLOBAL RESET
 ═══════════════════════════════════════════════════════════ */
 @layer base {
   html {
     scroll-behavior: smooth;
+    color-scheme: dark;
   }
 
   body {
     background-color: var(--color-background);
-    color: var(--color-primaryBlack);
+    color: var(--color-on-surface);
     font-family: var(--font-body);
+    font-weight: 300;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Sharp 0px Architectural Corner Discipline */
+  *,
+  *::before,
+  *::after {
+    border-radius: 0;
+  }
+
+  /* Exemption: Optical circular status dots only */
+  .rounded-full {
+    border-radius: 9999px !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: -0.015em;
   }
 
-  /* Reduced motion — honour system preference */
+  /* Focus styling — razor hairline outline in champagne, zero diffuse glow */
+  :focus-visible {
+    outline: 1px solid var(--color-tertiary);
+    outline-offset: 2px;
+  }
+
+  /* Premium selection */
+  ::selection {
+    background-color: var(--color-tertiary-container);
+    color: var(--color-tertiary);
+  }
+
+  /* Clean Scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-primary-container);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-outline-variant);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-tertiary);
+  }
+
+  /* Respect reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -86,9 +205,205 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   UTILITIES — Reusable animation delay helpers
+   STITCH TYPOGRAPHY UTILITIES (DESIGN.md specification)
 ═══════════════════════════════════════════════════════════ */
 @layer utilities {
+  .text-display-hero {
+    font-size: 80px;
+    line-height: 88px;
+    letter-spacing: -0.02em;
+    font-family: var(--font-display-hero);
+    font-weight: 400;
+  }
+  @media (max-width: 768px) {
+    .text-display-hero {
+      font-size: 44px;
+      line-height: 50px;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  .text-headline-lg {
+    font-size: 48px;
+    line-height: 56px;
+    letter-spacing: -0.015em;
+    font-family: var(--font-headline-lg);
+    font-weight: 400;
+  }
+  @media (max-width: 768px) {
+    .text-headline-lg {
+      font-size: 32px;
+      line-height: 38px;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  .text-headline-md {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+    font-family: var(--font-headline-md);
+    font-weight: 400;
+  }
+
+  .text-headline-sm {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: 0em;
+    font-family: var(--font-headline-sm);
+    font-weight: 400;
+  }
+
+  .text-body-lg {
+    font-size: 16px;
+    line-height: 28px;
+    letter-spacing: 0.01em;
+    font-family: var(--font-body-lg);
+    font-weight: 300;
+  }
+
+  .text-body-md {
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.01em;
+    font-family: var(--font-body-md);
+    font-weight: 300;
+  }
+
+  .text-body-sm {
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.02em;
+    font-family: var(--font-body-sm);
+    font-weight: 400;
+  }
+
+  .text-label-caps-lg {
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0.18em;
+    font-family: var(--font-label-caps-lg);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .text-label-caps-md {
+    font-size: 11px;
+    line-height: 14px;
+    letter-spacing: 0.22em;
+    font-family: var(--font-label-caps-md);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .text-label-caps-sm {
+    font-size: 9px;
+    line-height: 12px;
+    letter-spacing: 0.26em;
+    font-family: var(--font-label-caps-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .text-caption {
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 0.08em;
+    font-family: var(--font-caption);
+    font-weight: 400;
+  }
+
+  /* ── 6. Button Architectural Presets ───────────────────── */
+  .btn-primary {
+    background-color: var(--color-primary-fixed);
+    color: var(--color-primary-container);
+    font-family: var(--font-label-caps-md);
+    font-size: 11px;
+    line-height: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    min-height: 52px;
+    padding: 0 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-tertiary);
+    color: var(--color-on-tertiary);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary-fixed);
+    border: 1px solid rgba(245, 243, 239, 0.2);
+    font-family: var(--font-label-caps-md);
+    font-size: 11px;
+    line-height: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    min-height: 52px;
+    padding: 0 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-tertiary);
+    color: var(--color-tertiary);
+  }
+
+  .btn-tertiary {
+    background-color: transparent;
+    color: var(--color-primary-fixed);
+    border: none;
+    font-family: var(--font-label-caps-sm);
+    font-size: 9px;
+    line-height: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(184, 165, 138, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-tertiary:hover {
+    border-bottom-color: var(--color-tertiary);
+    color: var(--color-tertiary);
+    letter-spacing: 0.3em;
+  }
+
+  /* ── 7. Architectural Hairline Containers ─────────────── */
+  .border-hairline {
+    border: 1px solid var(--color-border-hairline);
+  }
+  .border-hairline-t {
+    border-top: 1px solid var(--color-border-hairline);
+  }
+  .border-hairline-b {
+    border-bottom: 1px solid var(--color-border-hairline);
+  }
+  .border-hairline-l {
+    border-left: 1px solid var(--color-border-hairline);
+  }
+  .border-hairline-r {
+    border-right: 1px solid var(--color-border-hairline);
+  }
+
+  /* ── 8. Preserved Micro-Interactions & Animation Utilities */
   .anim-delay-100 { animation-delay: 100ms; }
   .anim-delay-200 { animation-delay: 200ms; }
   .anim-delay-300 { animation-delay: 300ms; }
@@ -98,25 +413,22 @@
   .anim-delay-700 { animation-delay: 700ms; }
   .anim-delay-800 { animation-delay: 800ms; }
 
-  /* Scroll-reveal — hidden until JS adds .is-visible */
   .reveal {
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
-                transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
 
-  /* Staggered reveal siblings */
   .reveal-group > *:nth-child(1) { transition-delay: 0ms; }
   .reveal-group > *:nth-child(2) { transition-delay: 100ms; }
   .reveal-group > *:nth-child(3) { transition-delay: 200ms; }
   .reveal-group > *:nth-child(4) { transition-delay: 300ms; }
 
-  /* Underline draw — for nav hover */
   .underline-draw {
     position: relative;
   }
@@ -136,19 +448,17 @@
     transform: scaleX(1);
   }
 
-  /* Skeleton shimmer for image placeholders */
   .skeleton {
     background: linear-gradient(
       90deg,
-      var(--color-background) 25%,
-      #E8E4DF 50%,
-      var(--color-background) 75%
+      var(--color-surface) 25%,
+      var(--color-surface-container-high) 50%,
+      var(--color-surface) 75%
     );
     background-size: 200% 100%;
     animation: shimmer 1.4s ease infinite;
   }
 
-  /* Marquee track */
   .marquee-track {
     display: flex;
     width: max-content;
@@ -158,9 +468,8 @@
     animation-play-state: paused;
   }
 
-  /* Image zoom on hover — apply to parent */
   .img-zoom img {
-    transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .img-zoom:hover img {
     transform: scale(1.04);

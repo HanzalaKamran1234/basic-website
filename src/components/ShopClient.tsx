@@ -7,7 +7,6 @@ import { FilterIcon, SearchIcon, CloseIcon } from './icons';
 import {
   products,
   categoryLabels,
-  formatPrice,
   type Product,
   type ProductCategory,
   type ProductSize,
@@ -34,7 +33,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
   const [selectedSizes, setSelectedSizes] = useState<ProductSize[]>([]);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-  const [filterOpen, setFilterOpen] = useState(false);
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   const allSizes: ProductSize[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
@@ -46,7 +45,7 @@ export const ShopClient: React.FC<ShopClientProps> = ({
   const filtered = useMemo(() => {
     let list = [...products];
 
-    // Filter preset
+    // Filter preset from URL
     if (initialFilter === 'new') list = list.filter((p) => p.isNew);
     if (initialFilter === 'bestseller') list = list.filter((p) => p.isBestSeller);
 
@@ -101,173 +100,244 @@ export const ShopClient: React.FC<ShopClientProps> = ({
   };
 
   const hasActiveFilters =
-    selectedCategory || selectedSizes.length > 0 || query;
+    Boolean(selectedCategory) || selectedSizes.length > 0 || Boolean(query);
 
   return (
-    <>
-      {/* ── Toolbar ──────────────────────────────────────── */}
-      <div className="flex items-center justify-between gap-4 mb-8 flex-wrap">
-        {/* Search */}
-        <form onSubmit={handleSearch} className="flex items-center gap-2 border border-primaryBlack/15 bg-white px-4 py-2.5 flex-1 max-w-xs">
-          <SearchIcon className="w-4 h-4 text-secondaryText shrink-0" />
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Search products…"
-            className="font-body text-sm flex-1 bg-transparent focus:outline-none placeholder-secondaryText/60"
-          />
-          {inputValue && (
+    <div className="space-y-space-xl">
+      {/* ── Desktop & Mobile Filter Bar ───────────────────── */}
+      <div className="border-b border-outline-variant/20 pb-space-lg space-y-space-md">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+          {/* Category Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <button
+              onClick={() => setSelectedCategory('')}
+              className={`font-label-caps-sm text-label-caps-sm uppercase tracking-widest px-space-md py-space-sm transition-colors border ${
+                selectedCategory === ''
+                  ? 'bg-tertiary text-on-tertiary border-tertiary'
+                  : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-outline hover:text-on-surface'
+              }`}
+            >
+              ALL ({products.length})
+            </button>
+            <button
+              onClick={() => setSelectedCategory('tshirts')}
+              className={`font-label-caps-sm text-label-caps-sm uppercase tracking-widest px-space-md py-space-sm transition-colors border ${
+                selectedCategory === 'tshirts'
+                  ? 'bg-tertiary text-on-tertiary border-tertiary'
+                  : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-outline hover:text-on-surface'
+              }`}
+            >
+              T-SHIRTS
+            </button>
+            <button
+              onClick={() => setSelectedCategory('formal')}
+              className={`font-label-caps-sm text-label-caps-sm uppercase tracking-widest px-space-md py-space-sm transition-colors border ${
+                selectedCategory === 'formal'
+                  ? 'bg-tertiary text-on-tertiary border-tertiary'
+                  : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-outline hover:text-on-surface'
+              }`}
+            >
+              SHIRTS
+            </button>
+            <button
+              onClick={() => setSelectedCategory('pants')}
+              className={`font-label-caps-sm text-label-caps-sm uppercase tracking-widest px-space-md py-space-sm transition-colors border ${
+                selectedCategory === 'pants'
+                  ? 'bg-tertiary text-on-tertiary border-tertiary'
+                  : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-outline hover:text-on-surface'
+              }`}
+            >
+              TROUSERS
+            </button>
+          </div>
+
+          {/* Search & Sort Controls */}
+          <div className="flex flex-wrap items-center gap-space-sm">
+            {/* Search Input Form */}
+            <form onSubmit={handleSearch} className="relative flex-1 sm:w-64">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Search archive..."
+                className="w-full bg-surface-container-low border border-outline-variant/30 text-on-surface text-body-sm px-space-md py-space-xs pl-8 placeholder:text-on-surface-variant/40 focus:outline-none focus:border-tertiary transition-colors"
+              />
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60">
+                <SearchIcon className="w-3.5 h-3.5" />
+              </span>
+              {inputValue && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setInputValue('');
+                    setQuery('');
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface p-1"
+                >
+                  <CloseIcon className="w-3 h-3" />
+                </button>
+              )}
+            </form>
+
+            {/* Sort Selector */}
+            <div className="flex items-center gap-space-xs">
+              <span className="hidden sm:inline font-label-caps-sm text-label-caps-sm text-on-surface-variant tracking-wider uppercase">
+                SORT:
+              </span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="bg-surface-container-low border border-outline-variant/30 text-on-surface font-label-caps-sm text-label-caps-sm px-space-sm py-space-xs focus:outline-none focus:border-tertiary uppercase tracking-wider"
+              >
+                <option value="newest">CURATED / NEW</option>
+                <option value="price-asc">PRICE: LOW TO HIGH</option>
+                <option value="price-desc">PRICE: HIGH TO LOW</option>
+                <option value="name">ALPHABETICAL (A-Z)</option>
+              </select>
+            </div>
+
+            {/* Mobile Filter Toggle */}
             <button
               type="button"
-              onClick={() => { setInputValue(''); setQuery(''); }}
-              className="text-secondaryText hover:text-primaryBlack"
+              onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
+              className="lg:hidden flex items-center gap-1.5 px-space-sm py-space-xs bg-surface-container-low border border-outline-variant/30 text-on-surface font-label-caps-sm text-label-caps-sm uppercase tracking-wider"
             >
-              <CloseIcon className="w-3 h-3" />
+              <FilterIcon className="w-3.5 h-3.5" />
+              <span>SIZES</span>
             </button>
-          )}
-        </form>
-
-        <div className="flex items-center gap-3 ml-auto">
-          {/* Filter toggle (mobile) */}
-          <button
-            onClick={() => setFilterOpen((v) => !v)}
-            className="md:hidden flex items-center gap-2 font-body text-xs tracking-[0.15em] uppercase border border-primaryBlack/20 px-4 py-2.5 hover:border-primaryBlack transition-colors"
-          >
-            <FilterIcon className="w-4 h-4" />
-            Filter
-          </button>
-
-          {/* Sort */}
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="font-body text-xs tracking-[0.1em] border border-primaryBlack/20 bg-white px-3 py-2.5 focus:outline-none focus:border-primaryBlack cursor-pointer"
-          >
-            <option value="newest">Sort: Newest</option>
-            <option value="price-asc">Sort: Price Low–High</option>
-            <option value="price-desc">Sort: Price High–Low</option>
-            <option value="name">Sort: A–Z</option>
-          </select>
+          </div>
         </div>
-      </div>
 
-      {/* ── Layout ───────────────────────────────────────── */}
-      <div className="flex gap-8 items-start">
-
-        {/* ── Filter Sidebar ─────────────────────────────── */}
-        <aside
-          className={`shrink-0 w-56 ${filterOpen ? 'block' : 'hidden'} md:block`}
+        {/* Size Filters (Desktop Always, Mobile Collapsible) */}
+        <div
+          className={`${
+            mobileFilterOpen ? 'block' : 'hidden'
+          } lg:flex items-center justify-between pt-space-xs gap-space-md border-t border-outline-variant/10`}
         >
-          <div className="sticky top-28 space-y-8">
-            {hasActiveFilters && (
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-label-caps-sm text-label-caps-sm text-on-surface-variant tracking-wider uppercase mr-2">
+              FILTER BY SIZE:
+            </span>
+            {allSizes.map((s) => (
               <button
-                onClick={clearFilters}
-                className="font-body text-xs text-accent tracking-[0.15em] uppercase underline underline-offset-4 hover:text-primaryBlack transition-colors"
+                key={s}
+                onClick={() => toggleSize(s)}
+                className={`w-9 h-9 font-label-caps-sm text-label-caps-sm uppercase tracking-wider border transition-colors ${
+                  selectedSizes.includes(s)
+                    ? 'bg-tertiary text-on-tertiary border-tertiary'
+                    : 'bg-surface-container-low border-outline-variant/30 text-on-surface hover:border-tertiary/60'
+                }`}
               >
-                Clear All Filters
+                {s}
               </button>
+            ))}
+          </div>
+
+          <div className="font-body-sm text-body-sm text-on-surface-variant pt-2 lg:pt-0">
+            Showing <span className="text-on-surface font-normal">{filtered.length}</span> of {products.length} garments
+          </div>
+        </div>
+
+        {/* Active Filter Chips */}
+        {hasActiveFilters && (
+          <div className="flex items-center gap-2 flex-wrap pt-space-xs">
+            <span className="font-label-caps-sm text-label-caps-sm text-tertiary tracking-widest uppercase">
+              ACTIVE FILTERS:
+            </span>
+
+            {selectedCategory && (
+              <span className="inline-flex items-center gap-1.5 px-space-sm py-0.5 bg-surface-container border border-outline-variant/40 text-on-surface font-label-caps-sm text-label-caps-sm uppercase tracking-wider">
+                {categoryLabels[selectedCategory]}
+                <button
+                  onClick={() => setSelectedCategory('')}
+                  className="hover:text-tertiary"
+                  aria-label="Remove category filter"
+                >
+                  ×
+                </button>
+              </span>
             )}
 
-            {/* Category */}
-            <div>
-              <p className="font-body text-xs tracking-[0.2em] uppercase text-secondaryText mb-3">
-                Category
-              </p>
-              <div className="space-y-1.5">
-                {(['', 'tshirts', 'pants', 'formal'] as const).map((cat) => (
-                  <button
-                    key={cat || 'all'}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`w-full text-left font-body text-sm py-1.5 px-0 transition-colors ${
-                      selectedCategory === cat
-                        ? 'text-primaryBlack font-semibold'
-                        : 'text-secondaryText hover:text-primaryBlack'
-                    }`}
-                  >
-                    {cat === '' ? 'All Products' : categoryLabels[cat]}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Sizes */}
-            <div>
-              <p className="font-body text-xs tracking-[0.2em] uppercase text-secondaryText mb-3">
-                Size
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {allSizes.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => toggleSize(s)}
-                    className={`w-10 h-10 font-body text-xs border transition-colors ${
-                      selectedSizes.includes(s)
-                        ? 'bg-primaryBlack text-white border-primaryBlack'
-                        : 'bg-white text-primaryBlack border-primaryBlack/20 hover:border-primaryBlack'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Price range (static display, demo) */}
-            <div>
-              <p className="font-body text-xs tracking-[0.2em] uppercase text-secondaryText mb-3">
-                Price Range
-              </p>
-              <p className="font-body text-sm text-primaryBlack">
-                {formatPrice(2999)} — {formatPrice(8999)}
-              </p>
-              <p className="font-body text-xs text-secondaryText/60 mt-1">
-                Demo — price filter coming soon.
-              </p>
-            </div>
-          </div>
-        </aside>
-
-        {/* ── Product Grid ───────────────────────────────── */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-6">
-            <p className="font-body text-xs text-secondaryText">
-              {filtered.length} {filtered.length === 1 ? 'product' : 'products'}
-            </p>
-          </div>
-
-          {filtered.length === 0 ? (
-            <div className="text-center py-24">
-              <p className="font-heading text-3xl text-primaryBlack mb-3">No products found</p>
-              <p className="font-body text-sm text-secondaryText mb-6">
-                Try adjusting your filters or search term.
-              </p>
-              <button
-                onClick={clearFilters}
-                className="font-body text-xs tracking-[0.2em] uppercase border border-primaryBlack px-8 py-3 hover:bg-primaryBlack hover:text-white transition-colors"
+            {selectedSizes.map((s) => (
+              <span
+                key={s}
+                className="inline-flex items-center gap-1.5 px-space-sm py-0.5 bg-surface-container border border-outline-variant/40 text-on-surface font-label-caps-sm text-label-caps-sm uppercase tracking-wider"
               >
-                Clear Filters
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onQuickView={setQuickViewProduct}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+                SIZE: {s}
+                <button
+                  onClick={() => toggleSize(s)}
+                  className="hover:text-tertiary"
+                  aria-label={`Remove size ${s} filter`}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+
+            {query && (
+              <span className="inline-flex items-center gap-1.5 px-space-sm py-0.5 bg-surface-container border border-outline-variant/40 text-on-surface font-label-caps-sm text-label-caps-sm tracking-wider">
+                &ldquo;{query}&rdquo;
+                <button
+                  onClick={() => {
+                    setQuery('');
+                    setInputValue('');
+                  }}
+                  className="hover:text-tertiary"
+                  aria-label="Remove search term"
+                >
+                  ×
+                </button>
+              </span>
+            )}
+
+            <button
+              onClick={clearFilters}
+              className="font-label-caps-sm text-label-caps-sm text-tertiary hover:underline uppercase tracking-widest ml-2"
+            >
+              CLEAR ALL
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Quick View */}
+      {/* ── Product Grid or Empty State ───────────────────── */}
+      {filtered.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-desktop">
+          {filtered.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              onQuickView={setQuickViewProduct}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="py-24 text-center space-y-space-md border border-outline-variant/20 bg-surface-container-low max-w-xl mx-auto p-space-xl">
+          <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-widest block">
+            NO SPECIFICATIONS FOUND
+          </span>
+          <h3 className="font-headline-md text-headline-md text-on-surface font-normal">
+            No matching pieces in this edit
+          </h3>
+          <p className="font-body-md text-body-md text-on-surface-variant font-light max-w-md mx-auto">
+            Try adjusting your search criteria or removing active category and size constraints to view other items in the archive.
+          </p>
+          <div className="pt-space-sm">
+            <button
+              onClick={clearFilters}
+              className="px-space-xl py-space-md bg-tertiary text-on-tertiary font-label-caps-md text-label-caps-md tracking-[0.2em] uppercase hover:bg-primary-fixed transition-colors"
+            >
+              RESET ALL FILTERS
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Quick View Modal */}
       <QuickView
         product={quickViewProduct}
         onClose={() => setQuickViewProduct(null)}
       />
-    </>
+    </div>
   );
 };

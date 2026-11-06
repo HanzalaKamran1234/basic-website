@@ -1,31 +1,31 @@
 export const metadata = {
-  title: 'Size Guide — SPOGMAI',
-  description: 'Find your perfect fit. Size guides for T-shirts, trousers, and formal shirts.',
+  title: 'Size Guide & Dimensions — SPOGMAI',
+  description: 'Proportional size guides and garment dimensions for SPOGMAI T-shirts, trousers, and tailored shirts.',
 };
 
 const tshirtSizes = [
-  { size: 'XS', chest: '32–34"', length: '26"',  shoulder: '15.5"' },
-  { size: 'S',  chest: '35–37"', length: '27"',  shoulder: '16.5"' },
-  { size: 'M',  chest: '38–40"', length: '28"',  shoulder: '17.5"' },
-  { size: 'L',  chest: '41–43"', length: '29"',  shoulder: '18.5"' },
-  { size: 'XL', chest: '44–46"', length: '30"',  shoulder: '19.5"' },
-  { size: 'XXL',chest: '47–50"', length: '31"',  shoulder: '20.5"' },
+  { size: 'XS', chest: '36"', length: '27"', shoulder: '18"' },
+  { size: 'S',  chest: '38"', length: '28"', shoulder: '18.5"' },
+  { size: 'M',  chest: '40"', length: '29"', shoulder: '19"' },
+  { size: 'L',  chest: '42"', length: '30"', shoulder: '19.5"' },
+  { size: 'XL', chest: '44"', length: '31"', shoulder: '20"' },
+  { size: 'XXL',chest: '46"', length: '32"', shoulder: '20.5"' },
 ];
 
 const pantSizes = [
-  { size: 'S',  waist: '28–30"', hip: '34–36"', inseam: '30"' },
-  { size: 'M',  waist: '31–33"', hip: '37–39"', inseam: '31"' },
-  { size: 'L',  waist: '34–36"', hip: '40–42"', inseam: '32"' },
-  { size: 'XL', waist: '37–39"', hip: '43–45"', inseam: '32"' },
-  { size: 'XXL',waist: '40–43"', hip: '46–49"', inseam: '33"' },
+  { size: '28', waist: '28–29"', hip: '37"', inseam: '31"' },
+  { size: '30', waist: '30–31"', hip: '39"', inseam: '31.5"' },
+  { size: '32', waist: '32–33"', hip: '41"', inseam: '32"' },
+  { size: '34', waist: '34–35"', hip: '43"', inseam: '32.5"' },
+  { size: '36', waist: '36–37"', hip: '45"', inseam: '33"' },
 ];
 
 const shirtSizes = [
-  { size: 'S',  collar: '14.5"', chest: '36"',  sleeve: '32"' },
-  { size: 'M',  collar: '15"',   chest: '39"',  sleeve: '33"' },
-  { size: 'L',  collar: '15.5"', chest: '42"',  sleeve: '34"' },
-  { size: 'XL', collar: '16"',   chest: '45"',  sleeve: '35"' },
-  { size: 'XXL',collar: '17"',   chest: '48"',  sleeve: '36"' },
+  { size: 'S',  collar: '15.0"', chest: '38"', sleeve: '33.5"' },
+  { size: 'M',  collar: '15.5"', chest: '40"', sleeve: '34.0"' },
+  { size: 'L',  collar: '16.0"', chest: '42"', sleeve: '34.5"' },
+  { size: 'XL', collar: '16.5"', chest: '44"', sleeve: '35.0"' },
+  { size: 'XXL',collar: '17.0"', chest: '46"', sleeve: '35.5"' },
 ];
 
 function SizeTable({
@@ -36,12 +36,15 @@ function SizeTable({
   rows: Record<string, string>[];
 }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full font-body text-sm">
+    <div className="overflow-x-auto border border-outline-variant/30 bg-surface-container-low">
+      <table className="w-full font-body-sm text-body-sm text-left">
         <thead>
-          <tr className="border-b border-primaryBlack/10">
+          <tr className="border-b border-outline-variant/30 bg-surface-container">
             {headers.map((h) => (
-              <th key={h} className="text-left py-3 pr-6 text-[10px] tracking-[0.25em] uppercase text-secondaryText font-normal">
+              <th
+                key={h}
+                className="py-space-sm px-space-md font-label-caps-sm text-label-caps-sm uppercase tracking-widest text-tertiary font-medium"
+              >
                 {h}
               </th>
             ))}
@@ -49,9 +52,17 @@ function SizeTable({
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={i} className="border-b border-primaryBlack/5 hover:bg-primaryBlack/[0.02] transition-colors">
+            <tr
+              key={i}
+              className="border-b border-outline-variant/15 hover:bg-surface-container transition-colors"
+            >
               {Object.values(row).map((val, j) => (
-                <td key={j} className={`py-3.5 pr-6 ${j === 0 ? 'font-medium text-primaryBlack' : 'text-secondaryText'}`}>
+                <td
+                  key={j}
+                  className={`py-space-sm px-space-md ${
+                    j === 0 ? 'font-medium text-on-surface' : 'text-on-surface-variant font-light'
+                  }`}
+                >
                   {val}
                 </td>
               ))}
@@ -65,84 +76,117 @@ function SizeTable({
 
 export default function SizeGuidePage() {
   return (
-    <div className="bg-background min-h-screen pt-28 pb-24">
-      <div className="container mx-auto px-6 md:px-10 max-w-4xl">
-
-        {/* Header */}
-        <div className="mb-14">
-          <p className="font-body text-[10px] tracking-[0.4em] uppercase text-accent mb-3">Fit & Sizing</p>
-          <h1 className="font-heading text-[clamp(50px,7vw,88px)] text-primaryBlack leading-none mb-5">
-            Size Guide
+    <div className="bg-surface min-h-screen text-on-surface flex flex-col">
+      {/* ── Page Header ────────────────────────────────────── */}
+      <section className="w-full bg-primary-container border-b border-outline-variant/20 pt-36 pb-16 px-margin md:px-margin-desktop">
+        <div className="max-w-4xl space-y-space-xs">
+          <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-[0.28em] block">
+            FIT &amp; PROPORTIONS
+          </span>
+          <h1 className="font-display-hero text-headline-lg md:text-[68px] md:leading-[76px] text-primary-fixed font-normal tracking-tight">
+            Size &amp; Dimensions
           </h1>
-          <p className="font-body text-secondaryText text-sm max-w-xl leading-relaxed">
-            Use the measurements below as a guide to finding your fit.
-            All measurements are approximate sample specifications and may vary by style.
-            When in doubt, size up for a more relaxed fit.
+          <p className="font-body-md text-body-md text-on-surface-variant font-light max-w-xl pt-1">
+            All garments are engineered with relaxed architectural proportions. Use the illustrative specifications below to determine your silhouette preference.
           </p>
-          <p className="font-body text-xs text-secondaryText/50 mt-3 italic">
-            All measurements shown are provisional samples for demonstration purposes only.
+          <p className="font-caption text-caption text-tertiary/70 uppercase tracking-wider pt-2">
+            NOTICE: SPECIFICATIONS SHOWN ARE PROVISIONAL SAMPLE MEASUREMENTS FOR DEMONSTRATION PURPOSES.
           </p>
         </div>
+      </section>
 
-        {/* Measure guide */}
-        <div className="bg-white p-8 mb-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { title: 'Chest', desc: 'Measure around the fullest part of your chest, keeping the tape horizontal.' },
-            { title: 'Waist', desc: 'Measure around your natural waistline, at the narrowest point of your torso.' },
-            { title: 'Inseam', desc: 'Measure from the crotch seam to the bottom of the leg along the inner seam.' },
-          ].map(({ title, desc }) => (
-            <div key={title}>
-              <h3 className="font-heading text-lg text-primaryBlack mb-2">{title}</h3>
-              <p className="font-body text-xs text-secondaryText leading-relaxed">{desc}</p>
+      {/* ── Measurement Guidelines Cards ───────────────────── */}
+      <section className="w-full px-margin md:px-margin-desktop py-space-xl">
+        <div className="max-w-5xl mx-auto space-y-space-2xl">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter-desktop">
+            <div className="bg-surface-container-low border border-outline-variant/20 p-space-lg space-y-space-xs">
+              <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-wider block">
+                01 • CHEST MEASUREMENT
+              </span>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                Chest &amp; Torso
+              </h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant font-light leading-relaxed">
+                Measure around the fullest part of your chest, keeping the tape horizontal under the arms and across the shoulder blades.
+              </p>
             </div>
-          ))}
+
+            <div className="bg-surface-container-low border border-outline-variant/20 p-space-lg space-y-space-xs">
+              <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-wider block">
+                02 • WAIST &amp; RISE
+              </span>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                Natural Waistline
+              </h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant font-light leading-relaxed">
+                Measure around your natural waist where trousers comfortably sit, maintaining a finger’s width of ease.
+              </p>
+            </div>
+
+            <div className="bg-surface-container-low border border-outline-variant/20 p-space-lg space-y-space-xs">
+              <span className="font-label-caps-sm text-label-caps-sm text-tertiary uppercase tracking-wider block">
+                03 • INSEAM &amp; HEM
+              </span>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                Inside Leg
+              </h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant font-light leading-relaxed">
+                Measure from the lowest point of the crotch seam straight down the inside leg to the bottom hem opening.
+              </p>
+            </div>
+          </div>
+
+          {/* ── Table 1: T-Shirts ────────────────────────────── */}
+          <div className="space-y-space-sm">
+            <div className="border-b border-outline-variant/20 pb-space-xs flex justify-between items-baseline">
+              <h2 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                T-Shirts &amp; Drop-Shoulder Basics (Inches)
+              </h2>
+              <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">
+                BOX FIT SILHOUETTE
+              </span>
+            </div>
+            <SizeTable
+              headers={['SIZE', 'CHEST CIRCUMFERENCE', 'BODY LENGTH', 'SHOULDER WIDTH']}
+              rows={tshirtSizes}
+            />
+          </div>
+
+          {/* ── Table 2: Pants ───────────────────────────────── */}
+          <div className="space-y-space-sm">
+            <div className="border-b border-outline-variant/20 pb-space-xs flex justify-between items-baseline">
+              <h2 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                Contemporary Trousers (Inches)
+              </h2>
+              <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">
+                RELAXED PLEATED SILHOUETTE
+              </span>
+            </div>
+            <SizeTable
+              headers={['WAIST SIZE', 'WAISTBAND', 'HIP MEASUREMENT', 'STANDARD INSEAM']}
+              rows={pantSizes}
+            />
+          </div>
+
+          {/* ── Table 3: Shirts ──────────────────────────────── */}
+          <div className="space-y-space-sm">
+            <div className="border-b border-outline-variant/20 pb-space-xs flex justify-between items-baseline">
+              <h2 className="font-headline-sm text-headline-sm text-on-surface font-normal">
+                Tailored &amp; Casual Shirts (Inches)
+              </h2>
+              <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">
+                ARCHITECTURAL SPREAD COLLAR
+              </span>
+            </div>
+            <SizeTable
+              headers={['SIZE', 'COLLAR CIRCUMFERENCE', 'CHEST CIRCUMFERENCE', 'SLEEVE LENGTH']}
+              rows={shirtSizes}
+            />
+          </div>
+
         </div>
-
-        {/* T-shirts */}
-        <section className="mb-14">
-          <div className="border-l-2 border-accent pl-5 mb-6">
-            <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-1">01</p>
-            <h2 className="font-heading text-3xl text-primaryBlack">T-Shirts</h2>
-          </div>
-          <SizeTable
-            headers={['Size', 'Chest', 'Length', 'Shoulder']}
-            rows={tshirtSizes}
-          />
-        </section>
-
-        {/* Pants */}
-        <section className="mb-14">
-          <div className="border-l-2 border-accent pl-5 mb-6">
-            <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-1">02</p>
-            <h2 className="font-heading text-3xl text-primaryBlack">Pants & Trousers</h2>
-          </div>
-          <SizeTable
-            headers={['Size', 'Waist', 'Hip', 'Inseam']}
-            rows={pantSizes}
-          />
-        </section>
-
-        {/* Formal Shirts */}
-        <section className="mb-14">
-          <div className="border-l-2 border-accent pl-5 mb-6">
-            <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-1">03</p>
-            <h2 className="font-heading text-3xl text-primaryBlack">Formal Shirts</h2>
-          </div>
-          <SizeTable
-            headers={['Size', 'Collar', 'Chest', 'Sleeve']}
-            rows={shirtSizes}
-          />
-        </section>
-
-        {/* Fit note */}
-        <div className="bg-primaryBlack text-white p-8">
-          <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-3">Fit Advice</p>
-          <p className="font-body text-white/70 text-sm leading-relaxed max-w-xl">
-            If you are between sizes, we recommend sizing up for a relaxed fit or sizing down for a slimmer silhouette.
-            Product pages include specific fit notes (Slim, Regular, Relaxed) and model measurement references.
-          </p>
-        </div>
-      </div>
+      </section>
     </div>
   );
 }

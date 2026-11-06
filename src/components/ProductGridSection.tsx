@@ -25,7 +25,7 @@ export const ProductGridSection: React.FC<ProductGridSectionProps> = ({
 
   return (
     <>
-      <div className={`grid ${colClass} gap-6`}>
+      <div className={`grid ${colClass} gap-gutter-desktop`}>
         {products.map((product) => (
           <ProductCard
             key={product.id}
