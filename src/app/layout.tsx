@@ -1,21 +1,26 @@
-
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
+import { AnnouncementBar } from '../components/AnnouncementBar';
 
 export const metadata: Metadata = {
-  title: "My Website",
-  description: "A simple website built with Next.js",
+  title: 'SPOGMAI – Premium Men\'s Fashion',
+  description: 'Wear the legacy. Elegant, modern, timeless menswear.',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col">
-        {children}
+      <body className="min-h-screen flex flex-col bg-background text-primaryBlack">
+        <AnnouncementBar />
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-8">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
